@@ -1,0 +1,46 @@
+apiVersion: v1
+kind: Secret
+metadata:
+  name: longhorn-r2-backups
+  namespace: longhorn-system
+type: Opaque
+stringData:
+  AWS_ACCESS_KEY_ID: ENC[AES256_GCM,data:rC7lkrMIkXi2eHGc2mkqi9qEbW6I0zNnSkLjbm2sdAE=,iv:KIBQpaEOerbUZEsmbl6JcPp0g47FzFcI/ObAgOUsj3Y=,tag:kKPzccy9j7vdEbn5PP/IRQ==,type:str]
+  AWS_SECRET_ACCESS_KEY: ENC[AES256_GCM,data:KuOMdiKepCTf2Pv/dR2a6L7qOA7W7G0oow73kGwzug01Xwq8ViYOQUeBdzpRiEQXpeaEbD34hOk3o17EP/umTg==,iv:yaLA79DCwLCw75ts3nEXIQb4elQAI0MICaPYrUMFy5M=,tag:U5drofmr7YCL07DWn7i7Nw==,type:str]
+  AWS_ENDPOINTS: ENC[AES256_GCM,data:nPPm9E5zMRToEobxHLcuqOBb+L6yJsyucRlZe3bCky9iDlcjvBkMBhRpPxZ48T/d1VDd97NfFe0TqzQGWoB9RGh+UFo=,iv:FecxPtYxqmh3PNVegH5pFtpAbgQflg+yg9FsUo2wqaM=,tag:0Qpt6oIEcTSsyOVKsRBItw==,type:str]
+sops:
+  kms: []
+  gcp_kms: []
+  azure_kv: []
+  hc_vault: []
+  age:
+    - recipient: age1fklxkacc5zep443xxjj8tm4t3zquzuahp2sen8v0f2j24ur83v3qazet3a
+      enc: |
+        -----BEGIN AGE ENCRYPTED FILE-----
+        YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSB4NFkxM0ovMXJReDNuMGdY
+        QTRrYkxjMEpVUWt5WG1sbCt4RjlYMzBIaWhnCi95aURUWnVYTFhwVytCbVdMQzB1
+        TW9rS3JkV3JFdzM1YmhGNCtzYUwrSlUKLS0tIFNHaGxZUlhiV3VSUEZZQXE2dWtN
+        MU9FdDlCakNIcVo3UzFWS1pnalQ2blkKGhMAexlMKU9Tz+9WZ0IFeALr7mlbTNld
+        j4H78H+jp4AD/p3qin39nwplD0YQ9NuFZxyokhowJEBuSyC/VCiFNA==
+        -----END AGE ENCRYPTED FILE-----
+  lastmodified: "2026-02-16T11:29:02Z"
+  mac: ENC[AES256_GCM,data:j9Cu0OJFYI/9yprlXj6kEn+CsjLv+AoOq4EaJpRMphiAyS+qRGNuOfWk+8xE8b7VK6fiLkcoqlzYUrk7NGfhi1a/W9sGIRBcdJwqApHwjofgLbGRPmrkLJ3b+kQcas5nxvhNaVMFjssIezpVo7vaRXLtPSbiNNLKkEFWosS+fTk=,iv:0GHR3/rxrc53rhTNNYycuXE29PlQps5LwqU+2Da9b70=,tag:huaUpGveQvt6y5lN8QeLYQ==,type:str]
+  pgp: []
+  encrypted_regex: ^(data|stringData)$
+  version: 3.9.4
+---
+apiVersion: longhorn.io/v1beta2
+kind: RecurringJob
+metadata:
+  name: backup-daily-weekly-full
+  namespace: longhorn-system
+spec:
+  groups:
+    - default
+  task: backup
+  cron: "30 02 * * *"
+  concurrency: 1
+  retain: 30
+  parameters:
+    # Full backup after 6 incrementals -> with a daily job this yields ~weekly fulls.
+    full-backup-interval: "6"

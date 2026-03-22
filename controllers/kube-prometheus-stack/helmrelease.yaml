@@ -1,0 +1,78 @@
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: kube-prometheus-stack
+  namespace: monitoring
+spec:
+  interval: 30m
+  chart:
+    spec:
+      chart: kube-prometheus-stack
+      version: "82.2.0"
+      sourceRef:
+        kind: HelmRepository
+        name: prometheus-community
+        namespace: flux-system
+  values:
+    crds:
+      enabled: true
+    prometheus:
+      prometheusSpec:
+        retention: 15d
+        storageSpec:
+          volumeClaimTemplate:
+            spec:
+              storageClassName: longhorn
+              resources:
+                requests:
+                  storage: 20Gi
+        nodeSelector:
+          node-role.bach-industries/heavy: "true"
+
+    grafana:
+      enabled: true
+      grafana.ini:
+        server:
+          domain: grafana.bacherik.de
+          root_url: https://grafana.bacherik.de/
+
+        auth:
+          oauth_auto_login: true
+          disable_login_form: true
+
+        auth.generic_oauth:
+          enabled: true
+          name: "BachErik's OAuth"
+          allow_sign_up: true
+          client_id: grafana
+          scopes: "openid email profile offline_access roles"
+          email_attribute_path: email
+          login_attribute_path: username
+          name_attribute_path: full_name
+          auth_url: "https://auth.bacherik.de/realms/bacherik/protocol/openid-connect/auth"
+          token_url: "https://auth.bacherik.de/realms/bacherik/protocol/openid-connect/token"
+          api_url: "https://auth.bacherik.de/realms/bacherik/protocol/openid-connect/userinfo"
+          role_attribute_path: "contains(resource_access.grafana.roles[*], 'grafanaadmin') && 'GrafanaAdmin' || contains(resource_access.grafana.roles[*], 'admin') && 'Admin' || contains(resource_access.grafana.roles[*], 'editor') && 'Editor' || 'Viewer'"
+          allow_assign_grafana_admin: true
+      persistence:
+        enabled: true
+        storageClassName: longhorn
+        size: 5Gi
+      envValueFrom:
+        GF_AUTH_GENERIC_OAUTH_CLIENT_SECRET:
+          secretKeyRef:
+            name: grafana-oauth-client
+            key: client_secret
+      ingress:
+        enabled: true
+        annotations:
+          cert-manager.io/cluster-issuer: letsencrypt-prod
+        hosts:
+          - grafana.bacherik.de
+        tls:
+          - secretName: grafana-tls
+            hosts:
+              - grafana.bacherik.de
+
+    alertmanager:
+      enabled: true

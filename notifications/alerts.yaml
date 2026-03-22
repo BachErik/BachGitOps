@@ -1,0 +1,22 @@
+apiVersion: notification.toolkit.fluxcd.io/v1beta3
+kind: Alert
+metadata:
+  name: flux-alerts
+  namespace: flux-system
+spec:
+  providerRef:
+    name: discord
+  eventSeverity: info
+  eventSources:
+    # HelmRelease failures/successes
+    - kind: HelmRelease
+      namespace: "*"
+    # Kustomization reconciliation
+    - kind: Kustomization
+      namespace: "*"
+    # GitRepository sync issues
+    - kind: GitRepository
+      namespace: "*"
+  # Only alert on state changes, not every reconciliation
+  exclusionList:
+    - ".*no changes.*"

@@ -1,0 +1,25 @@
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: keycloak
+  namespace: keycloak
+spec:
+  interval: 30m
+  chart:
+    spec:
+      chart: keycloak
+      # Use the Bitnami chart or official Keycloak chart
+      sourceRef:
+        kind: HelmRepository
+        name: bitnami
+        namespace: flux-system
+  values:
+    # Point to CNPG-managed Postgres
+    postgresql:
+      enabled: false       # Don't deploy bundled Postgres
+    externalDatabase:
+      host: keycloak-db-rw.keycloak.svc
+      port: 5432
+      database: keycloak
+      existingSecret: keycloak-db-app
+      existingSecretPasswordKey: password

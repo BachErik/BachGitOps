@@ -1,0 +1,72 @@
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: traefik
+  namespace: traefik
+spec:
+  interval: 30m
+  chart:
+    spec:
+      chart: traefik
+      version: "39.0.2"
+      sourceRef:
+        kind: HelmRepository
+        name: traefik
+        namespace: flux-system
+      interval: 12h
+  values:
+    #ports:
+    #  minecraft:
+    #    port: 25565
+    #    expose:
+    #      default: true
+    #    exposedPort: 25565
+    #    protocol: TCP
+    deployment:
+      replicas: 2
+    ports:
+      web:
+        hostPort: 80
+      websecure:
+        hostPort: 443
+
+    # Redirect HTTP → HTTPS globally
+    web:
+      redirectTo:
+        port: websecure
+
+    # Enable Prometheus metrics
+    metrics:
+      prometheus:
+        entryPoint: metrics
+        addEntryPointsLabels: true
+        addServicesLabels: true
+
+    # Allow Traefik to watch all namespaces
+    providers:
+      kubernetesIngress:
+        enabled: true
+        publishedService:
+          enabled: true
+      kubernetesCRD:
+        enabled: true
+        allowCrossNamespace: true
+    resources:
+      requests:
+        cpu: "100m"
+        memory: "50Mi"
+      limits:
+        cpu: "300m"
+        memory: "150Mi"
+    autoscaling:
+      enabled: true
+      maxReplicas: 3
+      metrics:
+        - type: Resource
+          resource:
+            name: cpu
+            target:
+              type: Utilization
+              averageUtilization: 80
+    additionalArguments:
+      - "--entryPoints.rtmp.address=:1935/tcp"

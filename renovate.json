@@ -1,0 +1,131 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+
+  "extends": [
+    "config:best-practices",
+    "default:pinDigestsDisabled",
+    "docker:enableMajor",
+    ":separateMultipleMajor"
+  ],
+
+  "ignorePresets": [
+    "docker:pinDigests",
+    "helpers:pinGitHubActionDigests"
+  ],
+
+  "timezone": "Europe/Berlin",
+
+  "automerge": false,
+  "platformAutomerge": false,
+  "dependencyDashboard": true,
+
+  "prHourlyLimit": 0,
+  "prConcurrentLimit": 10,
+  "branchConcurrentLimit": 15,
+
+  "separateMinorPatch": false,
+
+  "flux": {
+    "fileMatch": [
+      "(^|/)clusters/.+\\.ya?ml$",
+      "(^|/)controllers/.+\\.ya?ml$",
+      "(^|/)configs/.+\\.ya?ml$",
+      "(^|/)apps/.+\\.ya?ml$",
+      "(^|/)helm-repositories/.+\\.ya?ml$",
+      "(^|/)upgrades/.+\\.ya?ml$",
+      "(^|/)notifications/.+\\.ya?ml$"
+    ]
+  },
+
+  "kubernetes": {
+    "fileMatch": [
+      "(^|/)controllers/.+\\.ya?ml$",
+      "(^|/)configs/.+\\.ya?ml$",
+      "(^|/)apps/.+\\.ya?ml$",
+      "(^|/)upgrades/.+\\.ya?ml$"
+    ]
+  },
+
+  "ignorePaths": [
+    "**/vendor/**",
+    "**/node_modules/**",
+    "**/.direnv/**",
+    "kb/**"
+  ],
+
+  "customManagers": [
+    {
+      "customType": "regex",
+      "fileMatch": ["upgrades/.+\\.ya?ml$"],
+      "matchStrings": [
+        "version:\\s*(?<currentValue>v[\\d]+\\.[\\d]+\\.[\\d]+\\+k3s\\d+)"
+      ],
+      "depNameTemplate": "k3s-io/k3s",
+      "datasourceTemplate": "github-releases"
+    }
+  ],
+
+  "packageRules": [
+    {
+      "description": "Major updates require explicit dashboard approval",
+      "matchUpdateTypes": ["major"],
+      "dependencyDashboardApproval": true,
+      "addLabels": ["major"]
+    },
+
+    {
+      "description": "Wait 3 days before opening PRs for brand-new releases",
+      "matchManagers": ["flux"],
+      "matchDatasources": ["helm", "docker"],
+      "minimumReleaseAge": "3 days"
+    },
+
+    {
+      "description": "Group non-major controller Helm chart updates",
+      "matchFileNames": ["controllers/**"],
+      "matchDatasources": ["helm"],
+      "matchUpdateTypes": ["minor", "patch"],
+      "groupName": "controllers (helm)",
+      "groupSlug": "controllers-helm"
+    },
+
+    {
+      "description": "Group non-major controller container image updates",
+      "matchFileNames": ["controllers/**"],
+      "matchDatasources": ["docker"],
+      "matchUpdateTypes": ["minor", "patch", "digest"],
+      "groupName": "controllers (images)",
+      "groupSlug": "controllers-images"
+    },
+
+    {
+      "description": "Group updates per app automatically",
+      "matchFileNames": ["apps/**"],
+      "additionalBranchPrefix": "{{parentDir}}-",
+      "groupName": "{{parentDir}}",
+      "groupSlug": "app-{{parentDir}}"
+    },
+
+    {
+      "description": "k3s version bumps — own PR, wait 7 days for stability",
+      "matchDepNames": ["k3s-io/k3s"],
+      "groupName": "k3s upgrade",
+      "groupSlug": "k3s-upgrade",
+      "addLabels": ["k3s"],
+      "minimumReleaseAge": "7 days"
+    },
+
+    {
+      "description": "FluxCD self-updates in own PR",
+      "matchFileNames": ["clusters/prod/flux-system/**"],
+      "groupName": "flux-system",
+      "groupSlug": "flux-system"
+    }
+  ],
+
+  "vulnerabilityAlerts": {
+    "labels": ["security"],
+    "prCreation": "immediate",
+    "vulnerabilityFixStrategy": "lowest"
+  }
+}

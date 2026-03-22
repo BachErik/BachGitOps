@@ -1,0 +1,31 @@
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: longhorn
+  namespace: longhorn-system
+spec:
+  interval: 30m
+  chart:
+    spec:
+      chart: longhorn
+      version: "1.11.0"
+      sourceRef:
+        kind: HelmRepository
+        name: longhorn
+        namespace: flux-system
+  values:
+    defaultSettings:
+      defaultBackupBlockSize: 16
+      backupTarget: "s3://k3s-longhorn@auto/longhorn/"
+      backupTargetCredentialSecret: "longhorn-r2-backups"
+      defaultReplicaCount: 2
+      pollInterval: 300
+      storageMinimalAvailablePercentage: 15
+      # Schedule heavy storage on the beefy node
+      replicaAutoBalance: best-effort
+    persistence:
+      defaultClassReplicaCount: 2
+      recurringJobSelector:
+        enable: true
+        jobList: >-
+          [{"name":"default","isGroup":true}]
