@@ -17,6 +17,3 @@ spec:
     - kind: GitRepository
       name: "*"
       namespace: "*"
-  # Only alert on state changes, not every reconciliation
-  exclusionList:
-    - ".*no changes.*"
