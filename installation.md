@@ -156,6 +156,18 @@ kubectl create secret generic sops-age \
   --from-file=age.agekey
 ```
 
+## 6. FluxCD
+```bash
+export GITHUB_TOKEN=...
+flux bootstrap github \
+  --token-auth \
+  --owner=BachErik \
+  --repository=BachGitOps \
+  --branch=main \
+  --path=clusters/prod \
+  --personal
+```
+
 # UFW
 
 ## Servers
