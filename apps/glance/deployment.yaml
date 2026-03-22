@@ -1,0 +1,49 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    reloader.stakater.com/auto: "true"
+  name: glance
+  namespace: glance
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: glance
+  template:
+    metadata:
+      labels:
+        app: glance
+    spec:
+      containers:
+        - name: glance
+          image: glanceapp/glance:v0.8.4
+          ports:
+            - containerPort: 8080
+          volumeMounts:
+            - name: glance-config
+              mountPath: /app/config/glance.yml
+              subPath: glance.yml
+            - name: timezone
+              mountPath: /etc/timezone
+              readOnly: true
+            - name: localtime
+              mountPath: /etc/localtime
+              readOnly: true
+          resources:
+            requests:
+              cpu: 100m
+              memory: 128Mi
+            limits:
+              cpu: 500m
+              memory: 512Mi
+      volumes:
+        - name: glance-config
+          configMap:
+            name: glance
+        - name: timezone
+          hostPath:
+            path: /etc/timezone
+        - name: localtime
+          hostPath:
+            path: /etc/localtime

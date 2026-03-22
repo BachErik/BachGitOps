@@ -4,4 +4,5 @@ resources:
   - keycloak/
   - gethomepage/
   - nginx-download/
+  - glance/
   #- oneuptime/

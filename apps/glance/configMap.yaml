@@ -1,0 +1,205 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: glance
+  namespace: glance
+data:
+  glance.yml: |
+    branding:
+      custom-footer: |
+        <p>Visit my Website <a href="https://bacherik.de">here</a></p>
+      logo-url: https://avatars.githubusercontent.com/u/75324423?v=4
+      favicon-url: https://avatars.githubusercontent.com/u/75324423?v=4
+
+    pages:
+      - name: Home
+        columns:
+          - size: small
+            widgets:
+              - type: calendar
+              - type: rss
+                limit: 100
+                collapse-after: 3
+                cache: 3h
+                feeds:
+                  - url: https://xkcd.com/rss.xml
+                  - url: http://www.turnoff.us/feed.xml
+                  - url: https://samwho.dev/rss.xml
+                  - url: https://www.reddit.com/r/softwaregore.rss
+                    title: SoftwareGore SubReddit
+                  - url: https://programming.dev/feeds/c/programmer_humor.xml?sort=New
+                    title: Programming.Dev
+                  - url: https://lemmy.ml/feeds/c/programmerhumor.xml?sort=New
+                  - url: https://getsession.org/feed
+                    title: Session Messenger Blog
+              - type: twitch-channels
+                channels:
+                  - BachErik_live
+                  - nikoverflow
+                  - secschool
+                  - KaiSchallenberg
+                  - TheJoCraft_live
+                  - BastiGHG
+                  - derBanko
+                collapse-after: -1
+
+          - size: full
+            widgets:
+              - type: search
+                search-engine: duckduckgo
+                new-tab: true
+                autofocus: true
+                bangs:
+                  - title: Google
+                    shortcut: "!g"
+                    url: https://www.google.com/search?q={QUERY}
+                  - title: YouTube
+                    shortcut: "!yt"
+                    url: https://www.youtube.com/results?search_query={QUERY}
+                  - title: Wikipedia
+                    shortcut: "!wp"
+                    url: https://en.wikipedia.org/wiki/Special:Search?search={QUERY}
+                  - title: Reddit
+                    shortcut: "!rd"
+                    url: https://www.reddit.com/search?q={QUERY}
+                  - title: Amazon
+                    shortcut: "!amz"
+                    url: https://www.amazon.com/s?k={QUERY}
+                  - title: GitHub
+                    shortcut: "!gh"
+                    url: https://github.com/search?q={QUERY}
+                  - title: StackOverflow
+                    shortcut: "!so"
+                    url: https://stackoverflow.com/search?q={QUERY}
+                  - title: Twitter
+                    shortcut: "!tw"
+                    url: https://twitter.com/search?q={QUERY}
+                  - title: DuckDuckGo
+                    shortcut: "!ddg"
+                    url: https://duckduckgo.com/?q={QUERY}
+                  - title: Bing
+                    shortcut: "!b"
+                    url: https://www.bing.com/search?q={QUERY}
+                  - title: IMDB
+                    shortcut: "!imdb"
+                    url: https://www.imdb.com/find?q={QUERY}
+                  - title: Twitch
+                    shortcut: "!twitch"
+                    url: https://www.twitch.tv/search?term={QUERY}
+                  - title: Yahoo
+                    shortcut: "!yh"
+                    url: https://search.yahoo.com/search?p={QUERY}
+                  - title: eBay
+                    shortcut: "!eb"
+                    url: https://www.ebay.com/sch/i.html?_nkw={QUERY}
+                  - title: Ecosia
+                    shortcut: "!ec"
+                    url: https://www.ecosia.org/search?q={QUERY}
+                  - title: Startpage
+                    shortcut: "!sp"
+                    url: https://www.startpage.com/do/dsearch?query={QUERY}
+                  
+              - type: hacker-news
+              
+              - type: videos
+                channels:
+                  - UCFgBYlz5LwymPSWBX-G6hBA # 2 Bored Guys
+                  - UCT3-jVASfcjZvzCbUglMObA # 7 vs. Wild
+                  - UCbVi0QiOfsWuKfdpoUpG_wg # NikOverflow
+                  - UCby9ZxEjJCqmccQGF3GSYlA # 19MisterX98
+                  - UCwPdVunI5mD-dpuLogOawbw # adumb
+                  - UCMT1Aw4R4nf_sFNDeuJqc6w # AI Warehouse
+                  - UCbKWv2x9t6u8yZoB3KcPtnw # Alan Becker
+                  - UCzH549YlZhdhIqhtvz7XHmQ # AlexiBexi
+                  - UC6jUsIEZ2F875OB2Be84cpA # Ampersand
+                  - UCnqq0B0j3ySKg9G1GM-WfIQ # BachErik
+                  - UC2Xd-TjJByJyK2w1zNwY0zQ # Beyond Fireship
+                  - UCjDMC2Q7O0OJuHLoi-qMZYg # BK Binary
+                  - UCZXW8E1__d5tZb-wLFOt8TQ # Bog
+                  - UC0e3QhIYukixgh5VVpKHH9Q # Code Bullet
+                  - UCgzg_f5HC6EnY-9q5Px1Q-g # Code Bullets Day Off
+                  - UCp68_FLety0O-n9QU6phsgw # Colinfurze
+                  - UCgH_pt2e9yC6m22Fj1CqvtQ # Coole Pizza
+                  - UCtBJZHmZqOvWJ0t8hjhWSAA # CraftsCodesArmy
+                  - UCYsoTC13yJNQRIsntEygEGQ # CraftyMasterman
+                  - UCsrxrOtjmWnH5FJhJnkTRBg # cubicmetre
+                  - UCdC0An4ZPNr_YiFiYoVbwaw # Daily Dose Of Internet
+                  - UCTdG69FrzLvvo-VLI9C8vww # DasIstJay
+                  - UCNzszbnvQeFzObW0ghk0Ckw # Dave's Garage
+                  - UCy0K29ps5V-7ZtRdutmaTmw # derBanko
+                  - UCXSFnQc5niQR7jHMf0U7aQA # Dev Detour
+                  - UCsWaVYzOFvEWDsEuvuZJ-8A # EmergentMind
+                  - UCuQT7Vc3OjjZuGkqehNxb6w # Enrico Tartarotti
+                  - UCsBjURrPoezykLs9EqgamOA # Fireship
+                  - UCB7TRghn_cOOq71aEAOvlzw # Green Code
+                  - UCPVdc8eBiMmitbnAapTLZ3A # HttxMarco
+                  - UCm8EsftbfNzSiRHzc7I59KQ # Kevin Fang
+                  - UCNmsYKEeov8ovQ66kbzEf4Q # Kiddy Kene
+                  - UCXuqSBlHAE6Xw-yeJA0Tunw # Linus Tech Tips
+                  - UClcE-kVhqyiHCcjYwcpfj9w # LiveOverflow
+                  - UCY1kMZp36IQSyNx_9h4mpCg # Mark Rober
+                  - UCMiJRAwDNSNzuYeN2uWa0pA # Mrwhosetheboss
+                  - UCgj6MvuVmp0JVanAZkFQM5A # NoRisk
+                  - UCxPX0RNS6EX5UrFh_GfiWZg # NoRiskk
+                  - UCj4zC1Hfj-uc90FUXzRamNw # Phoenix SC
+                  - UCW6MNdOsqv2E9AjQkv9we7A # PwnFunction
+                  - UClY084mbGLK_SLlOfgizjow # SalC1
+                  - UCfzlCWGWYyIQ0aLC5w48gBQ # sentdex
+                  - UC3S8vxwRfqLBdIhgRlDRVzw # stacksmashing
+                  - UCj1VqrHhDte54oLgPG4xpuQ # Stuff Made Here
+                  - UC3azLjQuz9s5qk76KEXaTvA # suckerpinch
+                  - UC_Nuc3040H1WjeO9aoY4NPg # The Duper Trooper
+                  - UCfaJNgrumOdK3uQtw4gDxtA # The Horizon
+                  - UCkZ3fSYruC0IXv6p34BHciQ # The Morpheus
+                  - UCLGY6_j7kZfA1dmmjR1J_7w # The Morpheus Tutorials
+                  - UCBa659QWEk1AI4Tg--mrJ2A # Tom Scott
+                  - UCltUSXcpOqq0SS_y9QCUO3Q # Tumppi066
+                  - UC8VhAX-voAUegprM4SpHQJQ # Wacky Science
+                
+          - size: small
+            widgets:
+              - type: clock
+                hour-format: 24h
+                timezones:
+                  - timezone: Europe/London
+                    label: London
+                  - timezone: America/Chicago
+                    label: 	Minnesota
+                  - timezone: America/Denver
+                    label: Denver
+              - type: releases
+                show-source-icon: true
+                repositories:
+                  - immich-app/immich
+                  - gethomepage/homepage
+                  - go-gitea/gitea
+                  - jellyfin/jellyfin
+                  - glanceapp/glance
+                  - codeberg:redict/redict
+                  - gitlab:fdroid/fdroidclient
+                  - dockerhub:gotify/server
+              - type: repository
+                repository: BachErik/killedby
+                pull-requests-limit: 5
+                issues-limit: 3
+                commits-limit: 3
+              - type: markets
+                markets:
+                  - symbol: INTC
+                    name: Intel
+                  - symbol: SPY
+                    name: S&P 500
+                  - symbol: BTC-USD
+                    name: Bitcoin
+                  - symbol: NVDA
+                    name: NVIDIA
+                  - symbol: AAPL
+                    name: Apple
+                  - symbol: MSFT
+                    name: Microsoft
+                  - symbol: GOOGL
+                    name: Google
+                  - symbol: AMD
+                    name: AMD
+                  - symbol: RDDT
+                    name: Reddit
