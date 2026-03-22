@@ -1,3 +1,4 @@
+---
 apiVersion: notification.toolkit.fluxcd.io/v1beta3
 kind: Provider
 metadata:
@@ -6,15 +7,15 @@ metadata:
 spec:
   type: discord
   secretRef:
-    name: discord-webhook-url
+    name: discord-webhook
 ---
 apiVersion: v1
 kind: Secret
 metadata:
-    name: discord-webhook-url
+    name: discord-webhook
     namespace: flux-system
 stringData:
-    address: ENC[AES256_GCM,data:xPSHlvuH+pCzF1CDGI2zb9+lLzoDS+r/gscjyopvWM0tEePV5kAGDlFTPDX3hNParNT5g8C4sSJgzh643uXZJBF4D29inLZS8b1Oy5uv+Eb5rla0XkV8NSvEDpCztIrlzvNQdwkIuEmXwh0c9aJYSXHZkB+p1SrVIw==,iv:HPe5MTAlnQBcVCuqjakosHe5x4TurWIn7WWXUJfVgyg=,tag:LybkwSMFPbG3eAfv97DJWQ==,type:str]
+    address: ENC[AES256_GCM,data:xlmYB68/gSgWd9fPaKX7b9KwREnf5fFR6ZD7vDuPKaYyJC0sQyNpLo9sGJvkloFqzTJWJR88/3ALL5RibaIOnfSJh6uqX3PsyXLLiXaS9/CRjBRmMru3XoVJezojuUBBK4NuaXJF2swfuIV88wWRfZFARgNEGRUoxQ==,iv:0AM7frJjz55q4BX2Uax/nE5Ay/qrwQucw67Bw8MomJw=,tag:0Z0bIikKopUjLVcJgBd8pQ==,type:str]
 sops:
     kms: []
     gcp_kms: []
@@ -24,14 +25,14 @@ sops:
         - recipient: age1fklxkacc5zep443xxjj8tm4t3zquzuahp2sen8v0f2j24ur83v3qazet3a
           enc: |
             -----BEGIN AGE ENCRYPTED FILE-----
-            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBPWWV2bjFGMnhSY0d0Mi8v
-            eEFXOGQxRzdJUUJhcDZvd1o3L0J0Rk8xMmpjClBLQkFLRVBrd05lMkluL0tFOGY4
-            OEJvdm52djYzUHBPQTFIbTMrb2MzYlkKLS0tIC8yVE5DNXJxb0RCWVB6WG9XOVZz
-            UVlKbGZsZWJhbzBXbUUyRXVrd1o4dVEKsZtwN77767oU/5qgHVJS05cjrGq5ardc
-            nVnvA2y8j9Tj/oCpVRqI+6fUIVsas/VID2t7VNc3Hd85oamu608p2A==
+            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSA0eWJvQ3hRZ1NTRGdtUHhq
+            TjFqbkJSZGtmRHRGdmNmV1k4dkN3NzZjVUFRCjdSdDBOY2RaQ0k2MFk5Rkh5ekR3
+            czNLY0k2dnVraUVkV3dnUVRLRGs2MncKLS0tIDAwcXRxaVlUd2Y5aFhzWlNZTU55
+            bksvbDVoWFl3cU1IRjNaWTBRWDJJeVUKzZ34TEqMARw5AcKfqutdvsiZ2+4v2day
+            ma24nTqiqplGCfkai3qmwI2KvYlc4nkmUacTw7bGtRlsDxSGPgGeSw==
             -----END AGE ENCRYPTED FILE-----
-    lastmodified: "2026-03-22T16:16:07Z"
-    mac: ENC[AES256_GCM,data:ztpE64Z+tlSZedWTJ4QIWGBN3ojruophjU9MsklXp62pUB5NwvPBoTxh6ol6Z1JXewuY03qSLI5PlKRcl8oF+xtuedgZQuA7XAOs1rRCaYpvncJM9CE/tOqO4CBOGXhaUYcoRpHPCDfOTGNNvp/rVgQToK6AdtxL1ECmDD8ysio=,iv:JXSgRh7cPRmrP0XpzGi4DNdMQ5syGS7Q9k6P8hM9iIQ=,tag:J1vDYOMMWQAFrUL3ZILHDQ==,type:str]
+    lastmodified: "2026-03-22T21:40:44Z"
+    mac: ENC[AES256_GCM,data:3ecMzxPdP/L6RYW33IYdLxj2sfQOvrvlhHSyNpMR6yxscLhlQ/lWCsrliKyA30Q3QG7osCU6SMVJ4hgv9PqrWTu0L5cwc8IXN70yNjSzYgRKIQn3cG4+oF0W+RYlS3LMarLdD3zGvRCcKg1n4AbsJq7b90CDVgLMal3oL6QL1cU=,iv:DRPUieUud7YuX+zJF1poO4cdyI90cc6ts6Nddf38CdM=,tag:zLtPoQ+npEWOBzEfgR2ePQ==,type:str]
     pgp: []
     encrypted_regex: ^(data|stringData)$
     version: 3.9.4
