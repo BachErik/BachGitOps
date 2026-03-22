@@ -10,10 +10,7 @@ spec:
   eventSources:
     - kind: HelmRelease
       name: "*"
-      namespace: "*"
     - kind: Kustomization
       name: "*"
-      namespace: "*"
     - kind: GitRepository
       name: "*"
-      namespace: "*"
