@@ -3,4 +3,5 @@ kind: Kustomization
 resources:
   - keycloak/
   - gethomepage/
+  - nginx-download/
   #- oneuptime/
