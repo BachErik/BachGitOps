@@ -4,8 +4,7 @@
   "extends": [
     "config:best-practices",
     "default:pinDigestsDisabled",
-    "docker:enableMajor",
-    ":separateMultipleMajor"
+    "docker:enableMajor"
   ],
 
   "ignorePresets": [
@@ -24,6 +23,7 @@
   "branchConcurrentLimit": 15,
 
   "separateMinorPatch": false,
+  "separateMultipleMajor": true,
 
   "flux": {
     "fileMatch": [
