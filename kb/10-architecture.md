@@ -5,7 +5,7 @@
 - 3-node k3s cluster (1 heavy, 2 light — all server nodes with embedded etcd)
 - GitOps (FluxCD v2) manages cluster state from a monorepo
 - Longhorn provides persistent volumes and backups to Cloudflare R2
-- CloudNativePG provides per-app Postgres clusters (backed up to R2)
+- CloudNativePG provides a single shared Postgres cluster with per-app databases (backed up to R2)
 - Traefik provides ingress (80/443) on all nodes via hostPort
 - cert-manager issues TLS certificates (DNS-01 via Cloudflare API)
 - Cloudflare provides DNS (DNS-only; A + AAAA for apps)
@@ -95,9 +95,10 @@
   - `helm-repositories/` — shared HelmRepository sources
   - `controllers/` — Tier 1: operators & CRD providers (cert-manager, Traefik, ExternalDNS, Longhorn, CNPG, system-upgrade-controller, kube-prometheus-stack)
   - `configs/` — Tier 2: CRs that depend on controllers (ClusterIssuers, Traefik middlewares, Longhorn backup targets, StorageClasses)
+  - `databases/` — Tier 2b: shared Postgres cluster + per-app database/role provisioning (depends on controllers)
   - `upgrades/` — k3s version Plan CR (depends on controllers)
   - `notifications/` — Flux alert provider + alerts to Discord (depends on controllers)
   - `apps/` — Tier 3: workloads (Keycloak, OneUptime, Stirling-PDF, website, Discord bot, monitoring dashboards)
-- Dependency order: `helm-repositories` → `controllers` → `configs` → `apps`
+- Dependency order: `helm-repositories` → `controllers` → `configs` + `databases` → `apps`
 - `kb/` contains human documentation + ADRs.
 - `renovate.json` at repo root configures Renovate Bot.

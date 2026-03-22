@@ -1,0 +1,15 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namespace: databases
+
+resources:
+  - superuser-secret.sops.yaml
+  - r2-credentials.sops.yaml
+  - cluster.yaml
+  - scheduled-backup.yaml
+  - provisioning/
+
+# Each app adds its role here.
+# Kustomize merges all patches into the Cluster resource.
+patches:
+  - path: managed-roles-patch.yaml

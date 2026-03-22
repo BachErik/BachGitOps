@@ -1,0 +1,42 @@
+apiVersion: postgresql.cnpg.io/v1
+kind: Cluster
+metadata:
+  name: postgres-platform
+  namespace: databases
+spec:
+  instances: 3
+
+  imageName: ghcr.io/cloudnative-pg/postgresql:18.1-system-trixie
+
+  storage:
+    size: 20Gi
+    storageClass: longhorn
+
+  superuserSecret:
+    name: postgres-platform-superuser
+
+  affinity:
+    enablePodAntiAffinity: true
+    topologyKey: kubernetes.io/hostname
+
+  monitoring:
+    enablePodMonitor: true
+
+  backup:
+    barmanObjectStore:
+      destinationPath: s3://databases@auto/cnpg/postgres-platform
+      endpointURL: https://e91592c86fc182244fa901d01efa9b35.eu.r2.cloudflarestorage.com
+
+      s3Credentials:
+        accessKeyId:
+          name: r2-credentials
+          key: ACCESS_KEY_ID
+        secretAccessKey:
+          name: r2-credentials
+          key: ACCESS_SECRET_KEY
+
+      wal:
+        compression: gzip
+        maxParallel: 4
+      data:
+        compression: gzip

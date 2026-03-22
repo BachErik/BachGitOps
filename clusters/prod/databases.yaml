@@ -1,7 +1,7 @@
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: apps
+  name: databases
   namespace: flux-system
 spec:
   interval: 30m
@@ -10,11 +10,11 @@ spec:
   sourceRef:
     kind: GitRepository
     name: flux-system
-  path: ./apps
+  path: ./databases
   prune: true
+  wait: true
   dependsOn:
-    - name: configs
-    - name: databases
+    - name: controllers
   decryption:
     provider: sops
     secretRef:
