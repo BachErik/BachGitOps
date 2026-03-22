@@ -2,7 +2,7 @@
 FluxCD automation repo for my k3s Cluster
 
 ## apps
-- [ ] [KilledBy](https://github.com/BachErik/killedby)
+- [X] [KilledBy](https://github.com/BachErik/killedby)
 - [ ] [DisKube](https://github.com/BachErik/diskube)
 - [ ] [OneUptime](https://oneuptime.com/)
 - [X] [Keycloak](https://www.keycloak.org/)
