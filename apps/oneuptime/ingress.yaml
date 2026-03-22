@@ -5,12 +5,12 @@ metadata:
   namespace: oneuptime
   annotations:
     cert-manager.io/cluster-issuer: letsencrypt-prod
-    external-dns.alpha.kubernetes.io/hostname: status.example.com
+    external-dns.alpha.kubernetes.io/hostname: status.bacherik.de
 spec:
   entryPoints:
     - websecure
   routes:
-    - match: Host(`status.example.com`)
+    - match: Host(`status.bacherik.de`)
       kind: Rule
       services:
         - name: oneuptime
