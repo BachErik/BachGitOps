@@ -27,13 +27,11 @@ spec:
     ports:
       web:
         hostPort: 80
+        # Redirect HTTP → HTTPS globally
+        redirectTo:
+          port: websecure
       websecure:
         hostPort: 443
-
-    # Redirect HTTP → HTTPS globally
-    web:
-      redirectTo:
-        port: websecure
 
     # Enable Prometheus metrics
     metrics:
