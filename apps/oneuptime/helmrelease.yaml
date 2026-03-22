@@ -14,8 +14,8 @@ spec:
         namespace: flux-system
   values:
     # CRITICAL: Disable OneUptime's bundled ingress/proxy
-    ingress:
-      enabled: false
+    #ingress:
+     # enabled: false
     nginx:
       enabled: false
 

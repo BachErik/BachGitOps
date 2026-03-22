@@ -8,14 +8,14 @@ spec:
     name: discord
   eventSeverity: info
   eventSources:
-    # HelmRelease failures/successes
     - kind: HelmRelease
+      name: "*"
       namespace: "*"
-    # Kustomization reconciliation
     - kind: Kustomization
+      name: "*"
       namespace: "*"
-    # GitRepository sync issues
     - kind: GitRepository
+      name: "*"
       namespace: "*"
   # Only alert on state changes, not every reconciliation
   exclusionList:
