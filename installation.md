@@ -106,7 +106,6 @@ Beefy server:
 curl -sfL https://get.k3s.io | INSTALL_K3S_EXEC="server" sh -s - \
   --cluster-init \
   --disable traefik \
-  --disable servicelb \
   --disable local-storage \
   --disable-cloud-controller \
   --disable-helm-controller \
@@ -130,7 +129,6 @@ curl -sfL https://get.k3s.io | INSTALL_K3S_EXEC="server" sh -s - \
   --server "${K3S_URL}" \
   --token "${K3S_TOKEN}" \
   --disable traefik \
-  --disable servicelb \
   --disable local-storage \
   --disable-cloud-controller \
   --disable-helm-controller \

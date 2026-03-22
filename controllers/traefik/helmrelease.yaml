@@ -26,9 +26,13 @@ spec:
       replicas: 2
     ports:
       web:
-        hostPort: 80
+        expose:
+          default: true
       websecure:
-        hostPort: 443
+        expose:
+          default: true
+    service:
+      type: LoadBalancer
 
     # Enable Prometheus metrics
     metrics:
