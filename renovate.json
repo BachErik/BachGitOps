@@ -62,6 +62,13 @@
       ],
       "depNameTemplate": "k3s-io/k3s",
       "datasourceTemplate": "github-releases"
+    },
+    {
+      "customType": "regex",
+      "fileMatch": ["controllers/system-upgrade-controller/.+\\.ya?ml$"],
+      "matchStrings": ["tag:\\s*(?<currentValue>v[\\d]+\\.[\\d]+\\.[\\d]+)"],
+      "depNameTemplate": "rancher/system-upgrade-controller",
+      "datasourceTemplate": "github-releases"
     }
   ],
 

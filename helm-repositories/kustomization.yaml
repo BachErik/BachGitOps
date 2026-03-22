@@ -8,5 +8,4 @@ resources:
   - bitnami.yaml
   - prometheus-community.yaml
   - oneuptime.yaml
-  - rancher.yaml
   - external-dns.yaml

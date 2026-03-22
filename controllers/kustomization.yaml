@@ -8,5 +8,6 @@ resources:
   - kube-prometheus-stack/helmrelease.yaml
   - kube-prometheus-stack/secret.yaml
   - longhorn/helmrelease.yaml
-  - system-upgrade-controller/helmrelease.yaml
+  - system-upgrade-controller/source.yaml
+  - system-upgrade-controller/kustomization-cr.yaml
   - traefik/helmrelease.yaml
