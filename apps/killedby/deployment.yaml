@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: killedby
+  namespace: killedby
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: killedby
+  template:
+    metadata:
+      labels:
+        app: killedby
+    spec:
+      containers:
+        - name: killedby
+          image: bacherik/killedby:v1.2.2
+          env:
+            - name: GITHUB_USERNAME
+              value: "bacherik"
+            - name: GITHUB_REPOSITORY
+              value: "killedby.json"
+            - name: UPDATE_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: killedbytoken
+                  key: update-token
+          ports:
+            - containerPort: 8080
+          resources:
+            limits:
+              cpu: 500m
+              memory: 512Mi
+            requests:
+              cpu: 250m
+              memory: 256Mi

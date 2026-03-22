@@ -5,4 +5,5 @@ resources:
   - gethomepage/
   - nginx-download/
   - glance/
+  - killedby/
   #- oneuptime/

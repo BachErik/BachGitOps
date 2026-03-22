@@ -1,0 +1,27 @@
+apiVersion: v1
+kind: Secret
+metadata:
+  name: killedbytoken
+  namespace: killedby
+data:
+  update-token: ENC[AES256_GCM,data:gIRIUtqzlqJLMpzyA7Ec/npD5QD/lKZ63ApnNTXT4Y09j8nSQvhRAgbc58iSZBjHjrG0U0o0oaYJDzP3b2RNxrBiR3xrarA5UC1xJsuV2kMwPaXn54gFVyj3GdEw/6yE6XtkoFNmezUa5DsvQL71JsHKGTGPPuaLRjxFOY72WKTQahZcYZYZHyYdNRZ3JfJPMs8bzQTO7Mc0XoHo/Y1H0fZ79Ky+288TDg1Y6g==,iv:/9BtlR49usC53lQqyeSK9hQzrLRSxx/b1MInyOXJyhs=,tag:F/rD6vXTJuZHRd5u0u/fWA==,type:str]
+sops:
+  kms: []
+  gcp_kms: []
+  azure_kv: []
+  hc_vault: []
+  age:
+    - recipient: age1fklxkacc5zep443xxjj8tm4t3zquzuahp2sen8v0f2j24ur83v3qazet3a
+      enc: |
+        -----BEGIN AGE ENCRYPTED FILE-----
+        YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBINlJtRThQaUZ0V3BMQStt
+        UEMyUXg3citIVk5tTnJnbitpdWxlOGZWYTBzCkpuZzBETGFCakFJNFQ0ai9VY0c5
+        MVM3T0oyeTJxSEhvKzJmdi9CVUZkNDAKLS0tIEp3L1pTYS8weEdIWG5rUGVHUTl6
+        OGdUWEJwR1VzTHJkeWlUTDNoRm9FL00Kn/iy0ReXWtycoXl7/bNojDBDxqssjHgB
+        W/P8WIfzeu/ZWTIeKtp8Tpk378M2pWQvEMgPGSuqhAtO4a9VkD3Stw==
+        -----END AGE ENCRYPTED FILE-----
+  lastmodified: "2025-03-18T16:12:50Z"
+  mac: ENC[AES256_GCM,data:1v6qXMe3t3E1rUxbU/xuACrlgAMjdMRW6zklO7Tvl9K1Rd4AGo4CzsM/vLgOp20knjp00Qi13+4rP5df7SacUrTEMqpN0OXX7JEZRFSxVBLVosR0r62Ddbg98FatZ3M3TDBKyoXtClRdzGZ70+1jG6/62mJbiBoNjB3R/S4J7Og=,iv:ecluq7j7mLUMN8Dal8MfwP2A738Phw0PtjXjT4Mx9xM=,tag:lQ0Vj+cSXBBlP5dJXJOIxw==,type:str]
+  pgp: []
+  encrypted_regex: ^(data|stringData)$
+  version: 3.9.4
