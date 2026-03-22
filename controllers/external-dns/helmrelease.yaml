@@ -68,7 +68,8 @@ spec:
         namespace: flux-system
       interval: 12h
   values:
-    provider.name: cloudflare
+    provider:
+      name: cloudflare
     policy: sync
     domainFilters:
       - lyre.works
