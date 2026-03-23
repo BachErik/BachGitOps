@@ -24,7 +24,7 @@ spec:
 
   backup:
     barmanObjectStore:
-      destinationPath: s3://databases@auto/cnpg/postgres-platform
+      destinationPath: s3://databases/cnpg/postgres-platform
       endpointURL: https://e91592c86fc182244fa901d01efa9b35.eu.r2.cloudflarestorage.com
 
       s3Credentials:
