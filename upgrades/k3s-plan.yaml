@@ -10,6 +10,6 @@ spec:
   cordon: true
   drain:
     force: true
-    skipWaitForDeleteTimeout: 60
+    skipWaitForDeleteTimeout: 180
   upgrade:
     image: rancher/k3s-upgrade
