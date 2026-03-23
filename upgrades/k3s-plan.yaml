@@ -11,5 +11,36 @@ spec:
   drain:
     force: true
     skipWaitForDeleteTimeout: 180
+  nodeSelector:
+    matchExpressions:
+      - key: node-role.kubernetes.io/control-plane
+        operator: In
+        values:
+          - "true"
+  upgrade:
+    image: rancher/k3s-upgrade
+---
+apiVersion: upgrade.cattle.io/v1
+kind: Plan
+metadata:
+  name: k3s-agent
+  namespace: system-upgrade
+spec:
+  version: v1.35.2+k3s1
+  concurrency: 1
+  serviceAccountName: system-upgrade
+  cordon: true
+  drain:
+    force: true
+    skipWaitForDeleteTimeout: 180
+  nodeSelector:
+    matchExpressions:
+      - key: node-role.kubernetes.io/control-plane
+        operator: DoesNotExist
+  prepare:
+    image: rancher/k3s-upgrade
+    args:
+      - prepare
+      - k3s-server
   upgrade:
     image: rancher/k3s-upgrade
