@@ -1,7 +1,28 @@
 apiVersion: notification.toolkit.fluxcd.io/v1beta3
 kind: Alert
 metadata:
-  name: flux-alerts
+  name: flux-alerts-errors
+  namespace: flux-system
+spec:
+  providerRef:
+    name: discord
+  eventSeverity: error
+  eventSources:
+    - kind: HelmRelease
+      name: "*"
+    - kind: Kustomization
+      name: "*"
+    - kind: GitRepository
+      name: "*"
+  exclusionList:
+    - ".*rate limit.*"
+    - ".*context deadline exceeded.*"
+    - ".*connection refused.*"
+---
+apiVersion: notification.toolkit.fluxcd.io/v1beta3
+kind: Alert
+metadata:
+  name: flux-alerts-info
   namespace: flux-system
 spec:
   providerRef:
@@ -14,3 +35,9 @@ spec:
       name: "*"
     - kind: GitRepository
       name: "*"
+  exclusionList:
+    - ".*Progressing.*"
+    - ".*ArtifactUpToDate.*"
+    - ".*no changes since last reconcilation.*"
+    - ".*DependencyNotReady.*"
+    - ".*ProgressingWithRetry.*"
