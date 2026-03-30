@@ -1,0 +1,38 @@
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: privatebin
+  namespace: privatebin
+spec:
+  interval: 30m
+  chart:
+    spec:
+      chart: privatebin
+      sourceRef:
+        kind: HelmRepository
+        name: privatebin
+        namespace: flux-system
+  values:
+    ingress:
+      enabled: true
+      annotations:
+        - cert-manager.io/cluster-issuer: "letsencrypt-prod"
+      hosts:
+        - host: privatebin.bacherik.de
+          paths:
+            - path: "/"
+              pathType: Prefix
+        - host: hastebin.bacherik.de
+          paths:
+            - path: "/"
+              pathType: Prefix
+        - host: bin.bacherik.de
+          paths:
+            - path: "/"
+              pathType: Prefix
+      tls:
+        - secretName: privatebin-tls
+          hosts:
+            - privatebin.bacherik.de
+            - hastebin.bacherik.de
+            - bin.bacherik.de

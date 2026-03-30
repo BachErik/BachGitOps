@@ -6,4 +6,5 @@ resources:
   - nginx-download/
   - glance/
   - killedby/
+  - privatebin/
   #- oneuptime/

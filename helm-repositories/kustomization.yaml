@@ -9,3 +9,4 @@ resources:
   - prometheus-community.yaml
   - oneuptime.yaml
   - external-dns.yaml
+  - privatebin.yaml
