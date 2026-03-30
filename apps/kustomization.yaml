@@ -7,4 +7,4 @@ resources:
   - glance/
   - killedby/
   - privatebin/
-  #- oneuptime/
+  - oneuptime/
