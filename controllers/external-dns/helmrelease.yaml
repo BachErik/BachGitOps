@@ -71,6 +71,10 @@ spec:
     provider:
       name: cloudflare
     policy: sync
+    sources:
+      - ingress
+      - service
+      - traefik-proxy
     domainFilters:
       - lyre.works
       - bacherik.de
