@@ -18,6 +18,8 @@ spec:
     # enabled: false
     nginx:
       enabled: false
+      service:
+        type: ClusterIP
 
     # Point to external CNPG Postgres
     postgresql:
