@@ -15,7 +15,7 @@ spec:
   values:
     # CRITICAL: Disable OneUptime's bundled ingress/proxy
     #ingress:
-     # enabled: false
+    # enabled: false
     nginx:
       enabled: false
 

@@ -1,31 +1,31 @@
 apiVersion: v1
 kind: Secret
 metadata:
-    name: cloudflare-api-token
-    namespace: cert-manager
+  name: cloudflare-api-token
+  namespace: cert-manager
 type: Opaque
 stringData:
-    api-token: ENC[AES256_GCM,data:1soJkhWIk3hIWdhGjg9xuk0mI4d8yUtjNrQ/p2JtB8uaETMMRgMiD8uKwG+tBm0pGQyGcnI=,iv:HGdcq4GwkEmXBob62u2/XO1TvTcEY+BuTFI6z/uk+oo=,tag:xkooQ1UUEpJ7TAtBWwEhyw==,type:str]
+  api-token: ENC[AES256_GCM,data:1soJkhWIk3hIWdhGjg9xuk0mI4d8yUtjNrQ/p2JtB8uaETMMRgMiD8uKwG+tBm0pGQyGcnI=,iv:HGdcq4GwkEmXBob62u2/XO1TvTcEY+BuTFI6z/uk+oo=,tag:xkooQ1UUEpJ7TAtBWwEhyw==,type:str]
 sops:
-    kms: []
-    gcp_kms: []
-    azure_kv: []
-    hc_vault: []
-    age:
-        - recipient: age1fklxkacc5zep443xxjj8tm4t3zquzuahp2sen8v0f2j24ur83v3qazet3a
-          enc: |
-            -----BEGIN AGE ENCRYPTED FILE-----
-            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBJMFowQXk4K1ZNNFEwR1Nt
-            UTA2Ulh4VllJU1h3a0d5NnNMZW5nZGJsMUNJCnZDdmpVRTNkNUVidWZPOE1tdll4
-            SnNDdGFMYTlMdU1ZSXdhZlp6aGxNTVEKLS0tIC84VmFWelJxNjlpbVZpOTE2eFYv
-            MDdBTlNLVmtwejl1aUFSWmF1Mkx2cXcKsqoiOAXBRTaFNXKLmpz5Xzlzq3SeAEZO
-            hSxcnyA3HEeMJnmAUBseIghl6TSS2EUTeXYLKZChotm8TjLop0KxGw==
-            -----END AGE ENCRYPTED FILE-----
-    lastmodified: "2026-03-22T19:36:59Z"
-    mac: ENC[AES256_GCM,data:oUs1ArKeXoDz7kIus0Vml4J4/RAY8kKGSs3LomelNVPW9QlcWZ/JaPtB4uSZ7iFVSmtX1Qs6C2S9LJYTAQ7QHExUbd2W7dUcwqYbyIQpEIfn79wTtV3U6jbMByra5OtKOuqFd6NhNsGyEL7KK712HEY+wDS7btNzjQ9mEsh4omw=,iv:cZIQeVPybCqebkUlr4W/MHDrkQyvvWZMruMUaCMmBgw=,tag:cHJILLcoSu44GrLfAwnoWg==,type:str]
-    pgp: []
-    encrypted_regex: ^(data|stringData)$
-    version: 3.9.4
+  kms: []
+  gcp_kms: []
+  azure_kv: []
+  hc_vault: []
+  age:
+    - recipient: age1fklxkacc5zep443xxjj8tm4t3zquzuahp2sen8v0f2j24ur83v3qazet3a
+      enc: |
+        -----BEGIN AGE ENCRYPTED FILE-----
+        YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBJMFowQXk4K1ZNNFEwR1Nt
+        UTA2Ulh4VllJU1h3a0d5NnNMZW5nZGJsMUNJCnZDdmpVRTNkNUVidWZPOE1tdll4
+        SnNDdGFMYTlMdU1ZSXdhZlp6aGxNTVEKLS0tIC84VmFWelJxNjlpbVZpOTE2eFYv
+        MDdBTlNLVmtwejl1aUFSWmF1Mkx2cXcKsqoiOAXBRTaFNXKLmpz5Xzlzq3SeAEZO
+        hSxcnyA3HEeMJnmAUBseIghl6TSS2EUTeXYLKZChotm8TjLop0KxGw==
+        -----END AGE ENCRYPTED FILE-----
+  lastmodified: "2026-03-22T19:36:59Z"
+  mac: ENC[AES256_GCM,data:oUs1ArKeXoDz7kIus0Vml4J4/RAY8kKGSs3LomelNVPW9QlcWZ/JaPtB4uSZ7iFVSmtX1Qs6C2S9LJYTAQ7QHExUbd2W7dUcwqYbyIQpEIfn79wTtV3U6jbMByra5OtKOuqFd6NhNsGyEL7KK712HEY+wDS7btNzjQ9mEsh4omw=,iv:cZIQeVPybCqebkUlr4W/MHDrkQyvvWZMruMUaCMmBgw=,tag:cHJILLcoSu44GrLfAwnoWg==,type:str]
+  pgp: []
+  encrypted_regex: ^(data|stringData)$
+  version: 3.9.4
 ---
 apiVersion: cert-manager.io/v1
 kind: ClusterIssuer

@@ -101,7 +101,9 @@ sudo reboot now
 ```
 
 ## 4. k3s Installation
+
 Beefy server:
+
 ```bash
 curl -sfL https://get.k3s.io | INSTALL_K3S_EXEC="server" sh -s - \
   --cluster-init \
@@ -120,6 +122,7 @@ curl -sfL https://get.k3s.io | INSTALL_K3S_EXEC="server" sh -s - \
 ```
 
 light-servers:
+
 ```bash
 export K3S_TOKEN="..."
 export K3S_URL="https://main.bacherik.de:6443"
@@ -142,12 +145,14 @@ curl -sfL https://get.k3s.io | INSTALL_K3S_EXEC="server" sh -s - \
 ```
 
 ## 5. Copy kubeconfig
+
 ```bash
 scp main:/etc/rancher/k3s/k3s.yaml ~/.kube/config
 sed -i 's/127.0.0.1/k3s.bacherik.de/g' ~/.kube/config
 ```
 
 ## 5. Apply sops
+
 ```bash
 kubectl create secret generic sops-age \
   --namespace=flux-system \
@@ -155,6 +160,7 @@ kubectl create secret generic sops-age \
 ```
 
 ## 6. FluxCD
+
 ```bash
 export GITHUB_TOKEN=...
 flux bootstrap github \
