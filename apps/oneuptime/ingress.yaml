@@ -19,7 +19,7 @@ spec:
               service:
                 name: oneuptime-app
                 port:
-                  number: 80
+                  number: 3002
     - host: status.bacherik.de
       http:
         paths:
