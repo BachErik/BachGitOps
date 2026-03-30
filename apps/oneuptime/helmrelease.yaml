@@ -13,9 +13,8 @@ spec:
         name: oneuptime
         namespace: flux-system
   values:
-    # CRITICAL: Disable OneUptime's bundled ingress/proxy
-    #ingress:
-    # enabled: false
+    host: oneuptime.bacherik.de
+    httpProtocol: https
     nginx:
       enabled: true
       service:
