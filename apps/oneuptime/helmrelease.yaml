@@ -22,17 +22,17 @@ spec:
 
     # Point to external CNPG Postgres
     postgresql:
-      enabled: false
-    externalPostgres:
-      host: postgres-platform-rw.databases.svc.cluster.local
-      port: 5432
-      username: oneuptime
-      database: oneuptime
-      existingSecret:
-        name: oneuptime-db-creds
-        passwordKey: password
-      ssl:
-        enabled: false
+      enabled: true
+    #externalPostgres:
+    #  host: postgres-platform-rw.databases.svc.cluster.local
+    #  port: 5432
+    #  username: oneuptime
+    #  database: oneuptime
+    #  existingSecret:
+    #    name: oneuptime-db-creds
+    #    passwordKey: password
+    #  ssl:
+    #    enabled: false
 
     # Pin to beefy node (OneUptime is resource-hungry)
     nodeSelector:
