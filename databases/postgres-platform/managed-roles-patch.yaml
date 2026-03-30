@@ -13,6 +13,13 @@ spec:
         superuser: false
         passwordSecret:
           name: keycloak-db-creds
+      # ── oneuptime ──────────────────────────────────
+      - name: oneuptime
+        ensure: present
+        login: true
+        superuser: false
+        passwordSecret:
+          name: oneuptime-db-creds
       # ── Add new app roles below ───────────────────
       # - name: myapp
       #   ensure: present

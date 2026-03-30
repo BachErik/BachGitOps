@@ -1,0 +1,10 @@
+apiVersion: postgresql.cnpg.io/v1
+kind: Database
+metadata:
+  name: postgres-platform-oneuptime
+  namespace: databases
+spec:
+  name: oneuptime
+  owner: oneuptime
+  cluster:
+    name: postgres-platform

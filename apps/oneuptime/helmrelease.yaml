@@ -23,9 +23,15 @@ spec:
     postgresql:
       enabled: false
     externalPostgres:
-      host: oneuptime-db-rw.oneuptime.svc
+      host: postgres-platform-rw.databases.svc.cluster.local
       port: 5432
-      # ... configure accordingly
+      username: oneuptime
+      database: oneuptime
+      existingSecret:
+        name: oneuptime-db-creds
+        passwordKey: password
+      ssl:
+        enabled: false
 
     # Pin to beefy node (OneUptime is resource-hungry)
     nodeSelector:

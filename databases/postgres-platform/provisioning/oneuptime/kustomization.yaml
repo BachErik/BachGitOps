@@ -3,7 +3,5 @@ kind: Kustomization
 namespace: databases
 
 resources:
-  - keycloak/
-  - oneuptime/
-  # ── Add new app provisioning below ──
-  # - myapp/
+  - role-secret.sops.yaml
+  - database.yaml
