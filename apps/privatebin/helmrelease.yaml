@@ -22,10 +22,6 @@ spec:
           paths:
             - path: "/"
               pathType: Prefix
-        - host: hastebin.bacherik.de
-          paths:
-            - path: "/"
-              pathType: Prefix
         - host: bin.bacherik.de
           paths:
             - path: "/"
@@ -34,5 +30,4 @@ spec:
         - secretName: privatebin-tls
           hosts:
             - privatebin.bacherik.de
-            - hastebin.bacherik.de
             - bin.bacherik.de
