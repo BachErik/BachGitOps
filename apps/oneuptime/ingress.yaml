@@ -17,7 +17,7 @@ spec:
             pathType: Prefix
             backend:
               service:
-                name: oneuptime-nginx
+                name: oneuptime-app
                 port:
                   number: 80
     - host: status.bacherik.de
