@@ -4,7 +4,7 @@ metadata:
   name: k3s-server
   namespace: system-upgrade
 spec:
-  version: v1.35.2+k3s1
+  version: v1.35.3+k3s1
   concurrency: 1
   serviceAccountName: system-upgrade
   cordon: true
@@ -26,7 +26,7 @@ metadata:
   name: k3s-agent
   namespace: system-upgrade
 spec:
-  version: v1.35.2+k3s1
+  version: v1.35.3+k3s1
   concurrency: 1
   serviceAccountName: system-upgrade
   cordon: true
