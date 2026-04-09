@@ -34,6 +34,13 @@ spec:
       ssl:
         enabled: false
 
+    clickhouse:
+      resources:
+        requests:
+          memory: "5Gi"
+        limits:
+          memory: "7Gi"
+
     # Pin to beefy node (OneUptime is resource-hungry)
     nodeSelector:
       node-role.bach-industries/heavy: "true"
