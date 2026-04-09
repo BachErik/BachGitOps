@@ -6,14 +6,14 @@ FluxCD automation repo for my k3s Cluster
 
 - [x] [KilledBy](https://github.com/BachErik/killedby)
 - [ ] [DisKube](https://github.com/BachErik/diskube)
-- [ ] [OneUptime](https://oneuptime.com/)
+- [X] [OneUptime](https://oneuptime.com/)
 - [x] [Keycloak](https://www.keycloak.org/)
 - [ ] [Stalwart](https://stalw.art/)
 - [ ] [Stirling-PDF](https://docs.stirlingpdf.com/)
 - [ ] [weblate](https://docs.weblate.org/)?
 - [x] Homepage
 - [x] [glance (dashboard)](https://github.com/glanceapp/glance)
-- [ ] [PrivateBin](https://github.com/PrivateBin/PrivateBin)
+- [X] [PrivateBin](https://github.com/PrivateBin/PrivateBin)
 - [x] [kube-prometheus-stack](https://artifacthub.io/packages/helm/prometheus-community/kube-prometheus-stack)?
 - [x] [nginx-downlaod](https://github.com/BachErik/FileDownload)
 - [ ] [redirects](https://github.com/BachErik/k8s-redirects)
