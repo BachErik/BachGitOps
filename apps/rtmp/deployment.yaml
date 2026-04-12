@@ -2,52 +2,98 @@ apiVersion: v1
 kind: Namespace
 metadata:
   name: rtmp
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: srs-config
+  namespace: rtmp
+data:
+  srs.conf: |-
+    listen              1935;
+    max_connections     1000;
+    daemon              off;
 
+    pid                 ./objs/srs.pid;
+    srs_log_tank        console;
+
+
+    vhost __defaultVhost__ {
+        tcp_nodelay     on;
+        min_latency     on;
+
+        play {
+            # Stick close to SRS "realtime" template values.
+            gop_cache       off;
+            queue_length    100;   # seconds max in queue
+            mw_latency      100;  # ms merge-write
+        }
+
+        publish {
+            mr              off;
+        }
+    }
 ---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: rtmp-server
+  name: srs
   namespace: rtmp
+  annotations:
+    reloader.stakater.com/auto: "true"
   labels:
-    app: rtmp-server
+    app: srs
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: rtmp-server
+      app: srs
   template:
     metadata:
       labels:
-        app: rtmp-server
+        app: srs
     spec:
       containers:
-        - name: rtmp-server
-          image: alfg/nginx-rtmp:latest
+        - name: srs
+          image: ossrs/srs:6
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 1935
-              name: rtmp
+          volumeMounts:
+            - name: srs-config
+              mountPath: /usr/local/srs/conf/srs.conf
+              subPath: srs.conf
           resources:
             requests:
-              cpu: "100m"
-              memory: "128Mi"
+              cpu: "250m"
+              memory: "256Mi"
             limits:
-              cpu: "500m"
-              memory: "512Mi"
-
+              cpu: "2"
+              memory: "1Gi"
+          livenessProbe:
+            tcpSocket:
+              port: 1935
+            initialDelaySeconds: 10
+            periodSeconds: 30
+          readinessProbe:
+            tcpSocket:
+              port: 1935
+            initialDelaySeconds: 5
+            periodSeconds: 10
+      volumes:
+        - name: srs-config
+          configMap:
+            name: srs-config
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: rtmp-server
+  name: srs
   namespace: rtmp
-  labels:
-    app: rtmp-server
 spec:
   type: ClusterIP
   selector:
-    app: rtmp-server
+    app: srs
   ports:
     - name: rtmp
       port: 1935
