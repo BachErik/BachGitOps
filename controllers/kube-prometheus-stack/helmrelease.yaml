@@ -5,6 +5,14 @@ metadata:
   namespace: monitoring
 spec:
   interval: 30m
+  timeout: 20m
+  upgrade:
+    timeout: 20m
+    cleanupOnFail: true
+    remediation:
+      retries: 2
+      strategy: rollback
+
   chart:
     spec:
       chart: kube-prometheus-stack
@@ -13,13 +21,7 @@ spec:
         kind: HelmRepository
         name: prometheus-community
         namespace: flux-system
-      timeout: 20m
-      upgrade:
-        timeout: 20m
-        cleanupOnFail: true
-        remediation:
-          retries: 2
-          strategy: rollback
+
   values:
     crds:
       enabled: true
