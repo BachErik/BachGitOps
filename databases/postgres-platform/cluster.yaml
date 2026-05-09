@@ -9,7 +9,7 @@ spec:
   imageName: ghcr.io/cloudnative-pg/postgresql:18.1-system-trixie
 
   storage:
-    size: 70Gi
+    size: 60Gi
     storageClass: longhorn
 
   superuserSecret:
