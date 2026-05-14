@@ -72,7 +72,7 @@ spec:
     # bacherik.de
     - name: bacherik-de-wildcard
       hostname: "*.bacherik.de"
-      port: 443
+      port: 8443
       protocol: HTTPS
       tls:
         mode: Terminate
@@ -84,7 +84,7 @@ spec:
     # lyre.works
     - name: lyre-works-apex
       hostname: "lyre.works"
-      port: 443
+      port: 8443
       protocol: HTTPS
       tls:
         mode: Terminate
@@ -95,7 +95,7 @@ spec:
           from: Same
     - name: lyre-works-wildcard
       hostname: "*.lyre.works"
-      port: 443
+      port: 8443
       protocol: HTTPS
       tls:
         mode: Terminate
@@ -107,7 +107,7 @@ spec:
     # kunamel.app
     - name: kunamel-app-apex
       hostname: "kunamel.app"
-      port: 443
+      port: 8443
       protocol: HTTPS
       tls:
         mode: Terminate
@@ -118,7 +118,7 @@ spec:
           from: Same
     - name: kunamel-app-wildcard
       hostname: "*.kunamel.app"
-      port: 443
+      port: 8443
       protocol: HTTPS
       tls:
         mode: Terminate
@@ -130,7 +130,7 @@ spec:
     # bachflow.app
     - name: bachflow-app-apex
       hostname: "bachflow.app"
-      port: 443
+      port: 8443
       protocol: HTTPS
       tls:
         mode: Terminate
@@ -141,7 +141,7 @@ spec:
           from: Same
     - name: bachflow-app-wildcard
       hostname: "*.bachflow.app"
-      port: 443
+      port: 8443
       protocol: HTTPS
       tls:
         mode: Terminate
