@@ -15,6 +15,7 @@ spec:
   dependsOn:
     - name: configs
     - name: databases
+    - name: gateway-api-crds
   decryption:
     provider: sops
     secretRef:

@@ -1,0 +1,634 @@
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: redirect
+---
+# ─── Wildcard Certificates (DNS01 via Cloudflare) ─────────────────────────────
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: cert-bacherik-de
+  namespace: redirect
+spec:
+  secretName: cert-bacherik-de
+  issuerRef:
+    name: letsencrypt-prod
+    kind: ClusterIssuer
+  dnsNames:
+    - "*.bacherik.de"
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: cert-lyre-works
+  namespace: redirect
+spec:
+  secretName: cert-lyre-works
+  issuerRef:
+    name: letsencrypt-prod
+    kind: ClusterIssuer
+  dnsNames:
+    - "lyre.works"
+    - "*.lyre.works"
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: cert-kunamel-app
+  namespace: redirect
+spec:
+  secretName: cert-kunamel-app
+  issuerRef:
+    name: letsencrypt-prod
+    kind: ClusterIssuer
+  dnsNames:
+    - "kunamel.app"
+    - "*.kunamel.app"
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: cert-bachflow-app
+  namespace: redirect
+spec:
+  secretName: cert-bachflow-app
+  issuerRef:
+    name: letsencrypt-prod
+    kind: ClusterIssuer
+  dnsNames:
+    - "bachflow.app"
+    - "*.bachflow.app"
+---
+# ─── Central Gateway ──────────────────────────────────────────────────────────
+apiVersion: gateway.networking.k8s.io/v1
+kind: Gateway
+metadata:
+  name: main
+  namespace: redirect
+spec:
+  gatewayClassName: traefik
+  listeners:
+    # bacherik.de
+    - name: bacherik-de-wildcard
+      hostname: "*.bacherik.de"
+      port: 443
+      protocol: HTTPS
+      tls:
+        mode: Terminate
+        certificateRefs:
+          - name: cert-bacherik-de
+      allowedRoutes:
+        namespaces:
+          from: Same
+    # lyre.works
+    - name: lyre-works-apex
+      hostname: "lyre.works"
+      port: 443
+      protocol: HTTPS
+      tls:
+        mode: Terminate
+        certificateRefs:
+          - name: cert-lyre-works
+      allowedRoutes:
+        namespaces:
+          from: Same
+    - name: lyre-works-wildcard
+      hostname: "*.lyre.works"
+      port: 443
+      protocol: HTTPS
+      tls:
+        mode: Terminate
+        certificateRefs:
+          - name: cert-lyre-works
+      allowedRoutes:
+        namespaces:
+          from: Same
+    # kunamel.app
+    - name: kunamel-app-apex
+      hostname: "kunamel.app"
+      port: 443
+      protocol: HTTPS
+      tls:
+        mode: Terminate
+        certificateRefs:
+          - name: cert-kunamel-app
+      allowedRoutes:
+        namespaces:
+          from: Same
+    - name: kunamel-app-wildcard
+      hostname: "*.kunamel.app"
+      port: 443
+      protocol: HTTPS
+      tls:
+        mode: Terminate
+        certificateRefs:
+          - name: cert-kunamel-app
+      allowedRoutes:
+        namespaces:
+          from: Same
+    # bachflow.app
+    - name: bachflow-app-apex
+      hostname: "bachflow.app"
+      port: 443
+      protocol: HTTPS
+      tls:
+        mode: Terminate
+        certificateRefs:
+          - name: cert-bachflow-app
+      allowedRoutes:
+        namespaces:
+          from: Same
+    - name: bachflow-app-wildcard
+      hostname: "*.bachflow.app"
+      port: 443
+      protocol: HTTPS
+      tls:
+        mode: Terminate
+        certificateRefs:
+          - name: cert-bachflow-app
+      allowedRoutes:
+        namespaces:
+          from: Same
+---
+# ─── LyreWorks ────────────────────────────────────────────────────────────────
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: lyreworks-github
+  namespace: redirect
+spec:
+  parentRefs:
+    - name: main
+  hostnames:
+    - "lyre.works"
+    - "github.lyre.works"
+    - "gh.lyre.works"
+  rules:
+    - matches:
+        - path: { type: PathPrefix, value: / }
+      filters:
+        - type: RequestRedirect
+          requestRedirect:
+            scheme: https
+            hostname: github.com
+            statusCode: 301
+            path:
+              type: ReplacePrefixMatch
+              replacePrefixMatch: /LyreWorks
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: lyreworks-twitter
+  namespace: redirect
+spec:
+  parentRefs:
+    - name: main
+  hostnames:
+    - "twitter.lyre.works"
+    - "x.lyre.works"
+  rules:
+    - matches:
+        - path: { type: PathPrefix, value: / }
+      filters:
+        - type: RequestRedirect
+          requestRedirect:
+            scheme: https
+            hostname: x.com
+            statusCode: 301
+            path:
+              type: ReplacePrefixMatch
+              replacePrefixMatch: /LyreWorks
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: lyreworks-bluesky
+  namespace: redirect
+spec:
+  parentRefs:
+    - name: main
+  hostnames:
+    - "bluesky.lyre.works"
+    - "bsky.lyre.works"
+  rules:
+    - matches:
+        - path: { type: PathPrefix, value: / }
+      filters:
+        - type: RequestRedirect
+          requestRedirect:
+            scheme: https
+            hostname: bsky.app
+            statusCode: 301
+            path:
+              type: ReplaceFullPath
+              replaceFullPath: /profile/lyre.works
+---
+# ─── Kunamel ──────────────────────────────────────────────────────────────────
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: kunamel-github
+  namespace: redirect
+spec:
+  parentRefs:
+    - name: main
+  hostnames:
+    - "kunamel.app"
+    - "github.kunamel.app"
+    - "gh.kunamel.app"
+  rules:
+    - matches:
+        - path: { type: PathPrefix, value: / }
+      filters:
+        - type: RequestRedirect
+          requestRedirect:
+            scheme: https
+            hostname: github.com
+            statusCode: 301
+            path:
+              type: ReplacePrefixMatch
+              replacePrefixMatch: /Kunamel
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: kunamel-twitter
+  namespace: redirect
+spec:
+  parentRefs:
+    - name: main
+  hostnames:
+    - "twitter.kunamel.app"
+    - "x.kunamel.app"
+  rules:
+    - matches:
+        - path: { type: PathPrefix, value: / }
+      filters:
+        - type: RequestRedirect
+          requestRedirect:
+            scheme: https
+            hostname: x.com
+            statusCode: 301
+            path:
+              type: ReplacePrefixMatch
+              replacePrefixMatch: /Kunamelapp
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: kunamel-youtube
+  namespace: redirect
+spec:
+  parentRefs:
+    - name: main
+  hostnames:
+    - "youtube.kunamel.app"
+    - "yt.kunamel.app"
+  rules:
+    - matches:
+        - path: { type: PathPrefix, value: / }
+      filters:
+        - type: RequestRedirect
+          requestRedirect:
+            scheme: https
+            hostname: youtube.com
+            statusCode: 301
+            path:
+              type: ReplacePrefixMatch
+              replacePrefixMatch: /@Kunamel
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: kunamel-bluesky
+  namespace: redirect
+spec:
+  parentRefs:
+    - name: main
+  hostnames:
+    - "bluesky.kunamel.app"
+    - "bsky.kunamel.app"
+  rules:
+    - matches:
+        - path: { type: PathPrefix, value: / }
+      filters:
+        - type: RequestRedirect
+          requestRedirect:
+            scheme: https
+            hostname: bsky.app
+            statusCode: 301
+            path:
+              type: ReplaceFullPath
+              replaceFullPath: /profile/kunamel.app
+---
+# ─── BachFlow ─────────────────────────────────────────────────────────────────
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: bachflow-github
+  namespace: redirect
+spec:
+  parentRefs:
+    - name: main
+  hostnames:
+    - "bachflow.app"
+    - "github.bachflow.app"
+    - "gh.bachflow.app"
+  rules:
+    - matches:
+        - path: { type: PathPrefix, value: / }
+      filters:
+        - type: RequestRedirect
+          requestRedirect:
+            scheme: https
+            hostname: github.com
+            statusCode: 301
+            path:
+              type: ReplacePrefixMatch
+              replacePrefixMatch: /BachFlow
+---
+# ─── BachErik ─────────────────────────────────────────────────────────────────
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: bacherik-github
+  namespace: redirect
+spec:
+  parentRefs:
+    - name: main
+  hostnames:
+    - "github.bacherik.de"
+    - "gh.bacherik.de"
+  rules:
+    - matches:
+        - path: { type: PathPrefix, value: / }
+      filters:
+        - type: RequestRedirect
+          requestRedirect:
+            scheme: https
+            hostname: github.com
+            statusCode: 301
+            path:
+              type: ReplacePrefixMatch
+              replacePrefixMatch: /BachErik
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: bacherik-youtube
+  namespace: redirect
+spec:
+  parentRefs:
+    - name: main
+  hostnames:
+    - "youtube.bacherik.de"
+    - "yt.bacherik.de"
+  rules:
+    - matches:
+        - path: { type: PathPrefix, value: / }
+      filters:
+        - type: RequestRedirect
+          requestRedirect:
+            scheme: https
+            hostname: youtube.com
+            statusCode: 301
+            path:
+              type: ReplacePrefixMatch
+              replacePrefixMatch: /@BachErik_live
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: bacherik-twitch
+  namespace: redirect
+spec:
+  parentRefs:
+    - name: main
+  hostnames:
+    - "twitch.bacherik.de"
+    - "tv.bacherik.de"
+  rules:
+    - matches:
+        - path: { type: PathPrefix, value: / }
+      filters:
+        - type: RequestRedirect
+          requestRedirect:
+            scheme: https
+            hostname: twitch.tv
+            statusCode: 301
+            path:
+              type: ReplacePrefixMatch
+              replacePrefixMatch: /BachErik_live
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: bacherik-instagram
+  namespace: redirect
+spec:
+  parentRefs:
+    - name: main
+  hostnames:
+    - "instagram.bacherik.de"
+    - "insta.bacherik.de"
+  rules:
+    - matches:
+        - path: { type: PathPrefix, value: / }
+      filters:
+        - type: RequestRedirect
+          requestRedirect:
+            scheme: https
+            hostname: instagram.com
+            statusCode: 301
+            path:
+              type: ReplacePrefixMatch
+              replacePrefixMatch: /bacherik_live
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: bacherik-twitter
+  namespace: redirect
+spec:
+  parentRefs:
+    - name: main
+  hostnames:
+    - "twitter.bacherik.de"
+    - "x.bacherik.de"
+  rules:
+    - matches:
+        - path: { type: PathPrefix, value: / }
+      filters:
+        - type: RequestRedirect
+          requestRedirect:
+            scheme: https
+            hostname: x.com
+            statusCode: 301
+            path:
+              type: ReplacePrefixMatch
+              replacePrefixMatch: /BachErik_live
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: bacherik-threads
+  namespace: redirect
+spec:
+  parentRefs:
+    - name: main
+  hostnames:
+    - "threads.bacherik.de"
+  rules:
+    - matches:
+        - path: { type: PathPrefix, value: / }
+      filters:
+        - type: RequestRedirect
+          requestRedirect:
+            scheme: https
+            hostname: threads.com
+            statusCode: 301
+            path:
+              type: ReplacePrefixMatch
+              replacePrefixMatch: /BachErik_live
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: bacherik-reddit
+  namespace: redirect
+spec:
+  parentRefs:
+    - name: main
+  hostnames:
+    - "reddit.bacherik.de"
+  rules:
+    - matches:
+        - path: { type: PathPrefix, value: / }
+      filters:
+        - type: RequestRedirect
+          requestRedirect:
+            scheme: https
+            hostname: reddit.com
+            statusCode: 301
+            path:
+              type: ReplacePrefixMatch
+              replacePrefixMatch: /u/BachErik
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: bacherik-gitlab
+  namespace: redirect
+spec:
+  parentRefs:
+    - name: main
+  hostnames:
+    - "gitlab.bacherik.de"
+  rules:
+    - matches:
+        - path: { type: PathPrefix, value: / }
+      filters:
+        - type: RequestRedirect
+          requestRedirect:
+            scheme: https
+            hostname: gitlab.com
+            statusCode: 301
+            path:
+              type: ReplacePrefixMatch
+              replacePrefixMatch: /BachErik
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: bacherik-bluesky
+  namespace: redirect
+spec:
+  parentRefs:
+    - name: main
+  hostnames:
+    - "bluesky.bacherik.de"
+    - "bsky.bacherik.de"
+  rules:
+    - matches:
+        - path: { type: PathPrefix, value: / }
+      filters:
+        - type: RequestRedirect
+          requestRedirect:
+            scheme: https
+            hostname: bsky.app
+            statusCode: 301
+            path:
+              type: ReplaceFullPath
+              replaceFullPath: /profile/bacherik.de
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: bacherik-mastodon
+  namespace: redirect
+spec:
+  parentRefs:
+    - name: main
+  hostnames:
+    - "mastodon.bacherik.de"
+  rules:
+    - matches:
+        - path: { type: PathPrefix, value: / }
+      filters:
+        - type: RequestRedirect
+          requestRedirect:
+            scheme: https
+            hostname: mastodon.social
+            statusCode: 301
+            path:
+              type: ReplaceFullPath
+              replaceFullPath: /@BachErik
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: bacherik-discord
+  namespace: redirect
+spec:
+  parentRefs:
+    - name: main
+  hostnames:
+    - "discord.bacherik.de"
+    - "dc.bacherik.de"
+  rules:
+    - matches:
+        - path: { type: PathPrefix, value: / }
+      filters:
+        - type: RequestRedirect
+          requestRedirect:
+            scheme: https
+            hostname: discord.gg
+            statusCode: 301
+            path:
+              type: ReplaceFullPath
+              replaceFullPath: /9K8hVWcjFW
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: bacherik-stackoverflow
+  namespace: redirect
+spec:
+  parentRefs:
+    - name: main
+  hostnames:
+    - "stackoverflow.bacherik.de"
+  rules:
+    - matches:
+        - path: { type: PathPrefix, value: / }
+      filters:
+        - type: RequestRedirect
+          requestRedirect:
+            scheme: https
+            hostname: stackoverflow.com
+            statusCode: 301
+            path:
+              type: ReplaceFullPath
+              replaceFullPath: /users/22619207/bacherik

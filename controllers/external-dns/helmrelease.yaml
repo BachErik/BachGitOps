@@ -75,6 +75,7 @@ spec:
       - ingress
       - service
       - traefik-proxy
+      - gateway-httproute
     domainFilters:
       - lyre.works
       - bacherik.de

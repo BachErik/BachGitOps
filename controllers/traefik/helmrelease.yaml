@@ -41,6 +41,8 @@ spec:
         addEntryPointsLabels: true
         addServicesLabels: true
 
+
+
     # Allow Traefik to watch all namespaces
     providers:
       kubernetesIngress:
@@ -50,6 +52,14 @@ spec:
       kubernetesCRD:
         enabled: true
         allowCrossNamespace: true
+      # Enable Kubernetes Gateway API
+      kubernetesGateway:
+        enabled: true
+        statusAddress:
+          service:
+            namespace: traefik
+            name: traefik
+            
     resources:
       requests:
         cpu: "100m"

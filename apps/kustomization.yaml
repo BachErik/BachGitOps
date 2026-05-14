@@ -9,3 +9,4 @@ resources:
   - privatebin/
   - oneuptime/
   - rtmp/
+  - redirect/
