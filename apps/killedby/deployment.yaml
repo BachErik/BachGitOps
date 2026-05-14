@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
         - name: killedby
-          image: bacherik/killedby:v1.2.2
+          image: bacherik/killedby:v1.3.0
           env:
             - name: GITHUB_USERNAME
               value: "bacherik"
