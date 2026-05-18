@@ -7,11 +7,17 @@ spec:
   interval: 30m
   timeout: 20m
   upgrade:
-    timeout: 20m
-    cleanupOnFail: true
+    disableWait: true
+    disableWaitForJobs: true
+    timeout: 10m
+    cleanupOnFail: false
     remediation:
       retries: 2
       strategy: rollback
+  install:
+    disableWait: true
+    disableWaitForJobs: true
+    timeout: 10m
 
   chart:
     spec:
