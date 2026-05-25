@@ -125,6 +125,7 @@ light-servers:
 
 ```bash
 export K3S_TOKEN="..."
+export INSTALL_K3S_VERSION="v1.36.0+k3s1"
 export K3S_URL="https://main.bacherik.de:6443"
 
 # Node 2
