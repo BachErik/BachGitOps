@@ -53,7 +53,9 @@ sudo apt install -y \
 ARCH="amd64"
 
 # Download the release binary.
-curl -LO "https://github.com/longhorn/cli/releases/download/v1.11.1/longhornctl-linux-${ARCH}"
+curl -L https://github.com/longhorn/cli/releases/download/v1.11.2/longhornctl-linux-${ARCH} -o longhornctl
+chmod +x longhornctl
+mv ./longhornctl /usr/local/bin/longhornctl
 
 wget https://github.com/derailed/k9s/releases/latest/download/k9s_Linux_${ARCH}.tar.gz
 tar xvf k9s_Linux_${ARCH}.tar.gz
