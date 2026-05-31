@@ -11,7 +11,7 @@ data:
 
   # --- server flavour ---
   TYPE: "PAPER"                # VANILLA | PAPER | FABRIC | FORGE | PURPUR | ...
-  VERSION: "LATEST"            # pin e.g. "1.21.4" for reproducible GitOps deploys
+  VERSION: "1.21.8"            # pin e.g. "1.21.4" for reproducible GitOps deploys
 
   # --- jvm / performance ---
   MEMORY: "4G"                 # JVM heap. Keep BELOW the container memory limit.
