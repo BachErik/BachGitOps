@@ -14,7 +14,7 @@ data:
   VERSION: "1.21.8"            # pin e.g. "1.21.4" for reproducible GitOps deploys
 
   # --- jvm / performance ---
-  MEMORY: "8G"                 # JVM heap. Keep BELOW the container memory limit.
+  MEMORY: "10G"                 # JVM heap. Keep BELOW the container memory limit.
   USE_AIKAR_FLAGS: "true"      # sensible G1GC flags, recommended for Paper/Purpur
 
   # --- gameplay ---
