@@ -1,0 +1,119 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: minecraft
+  namespace: minecraft
+  labels:
+    app: minecraft
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate            # single RWO PVC -> never run two pods concurrently
+  selector:
+    matchLabels:
+      app: minecraft
+  template:
+    metadata:
+      labels:
+        app: minecraft
+    spec:
+      # itzg images run as the "minecraft" user (uid/gid 1000).
+      # fsGroup makes the Longhorn volume writable for that user.
+      securityContext:
+        runAsUser: 1000
+        runAsGroup: 1000
+        fsGroup: 1000
+      terminationGracePeriodSeconds: 60   # give the server time to save & stop cleanly
+      containers:
+        # ------------------------------------------------------------------
+        # Minecraft server
+        # ------------------------------------------------------------------
+        - name: minecraft-server
+          image: itzg/minecraft-server:java21   # consider digest-pinning + Flux image automation
+          tty: true                # itzg recommends a TTY so the console attaches properly
+          stdin: true
+          ports:
+            - name: minecraft
+              containerPort: 25565
+              protocol: TCP
+            - name: rcon
+              containerPort: 25575
+              protocol: TCP
+          envFrom:
+            - configMapRef:
+                name: minecraft-config
+          env:
+            - name: RCON_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: minecraft-rcon
+                  key: RCON_PASSWORD
+          resources:
+            requests:
+              cpu: "1"
+              memory: 5Gi        # >= MEMORY (heap) + JVM/OS overhead
+            limits:
+              cpu: "4"
+              memory: 6Gi
+          volumeMounts:
+            - name: data
+              mountPath: /data
+          # mc-monitor ships inside the image and speaks the MC ping protocol.
+          startupProbe:
+            exec:
+              command: ["mc-monitor", "status", "--host", "127.0.0.1", "--port", "25565"]
+            failureThreshold: 30   # up to ~5 min for first start / world gen
+            periodSeconds: 10
+          readinessProbe:
+            exec:
+              command: ["mc-monitor", "status", "--host", "127.0.0.1", "--port", "25565"]
+            periodSeconds: 10
+          livenessProbe:
+            exec:
+              command: ["mc-monitor", "status", "--host", "127.0.0.1", "--port", "25565"]
+            periodSeconds: 30
+            failureThreshold: 5
+
+        # ------------------------------------------------------------------
+        # Backup sidecar (shares the pod's network -> RCON over localhost)
+        # ------------------------------------------------------------------
+        - name: mc-backup
+          image: itzg/mc-backup:latest
+          env:
+            - name: BACKUP_INTERVAL
+              value: "2h"
+            - name: INITIAL_DELAY
+              value: "2m"
+            - name: PRUNE_BACKUPS_DAYS
+              value: "7"
+            - name: RCON_HOST
+              value: "127.0.0.1"
+            - name: RCON_PORT
+              value: "25575"
+            - name: RCON_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: minecraft-rcon
+                  key: RCON_PASSWORD
+            - name: TZ
+              value: "Europe/Berlin"
+          resources:
+            requests:
+              cpu: 50m
+              memory: 64Mi
+            limits:
+              cpu: 500m
+              memory: 256Mi
+          volumeMounts:
+            - name: data
+              mountPath: /data
+              readOnly: true       # backup only reads the world; flush is done via RCON
+            - name: backups
+              mountPath: /backups
+      volumes:
+        - name: data
+          persistentVolumeClaim:
+            claimName: minecraft-data
+        - name: backups
+          persistentVolumeClaim:
+            claimName: minecraft-backups

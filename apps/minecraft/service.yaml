@@ -1,0 +1,18 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: minecraft
+  namespace: minecraft
+  labels:
+    app: minecraft
+spec:
+  type: LoadBalancer          # k3s klipper/servicelb handles this out of the box.
+                              # Use NodePort, or a Traefik IngressRouteTCP, if you prefer.
+  selector:
+    app: minecraft
+  ports:
+    - name: minecraft
+      port: 25565
+      targetPort: 25565
+      protocol: TCP
+  # externalTrafficPolicy: Local   # preserves client IPs if your LB supports it
