@@ -51,7 +51,7 @@ spec:
           resources:
             requests:
               cpu: "1"
-              memory: 5Gi        # >= MEMORY (heap) + JVM/OS overhead
+              memory: 10Gi        # >= MEMORY (heap) + JVM/OS overhead
             limits:
               cpu: "4"
               memory: 6Gi
