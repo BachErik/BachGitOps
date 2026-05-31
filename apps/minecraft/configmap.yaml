@@ -29,6 +29,6 @@ data:
   MODRINTH_PROJECTS: "kTmEpjUi,5fu9B7as"
   TZ: "Europe/Berlin"
   ENABLE_RCON: "true"          # required for graceful shutdown + the backup sidecar
-  OPS: "BachErik"            # comma-separated player names
-  WHITELIST: "BachErik"
+  OPS: "BachErik_"            # comma-separated player names
+  WHITELIST: "BachErik_"
   ENFORCE_WHITELIST: "true"
