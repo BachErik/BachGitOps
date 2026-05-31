@@ -10,4 +10,4 @@ resources:
   - oneuptime/
   - rtmp/
   - redirect/
-  - minecraft/
+  #- minecraft/
