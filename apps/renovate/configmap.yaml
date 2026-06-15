@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: renovate-config
+  namespace: renovate
+data:
+  config.js: |
+    module.exports = {
+      platform: 'forgejo',
+      endpoint: 'https://codeberg.org/api/v1/',
+      gitAuthor: 'Renovate Bot <renovate@bacherik.de>',
+      autodiscover: true,
+      repositories: ['BachErik/BachGitOps'],
+      onboarding: true,
+    };
