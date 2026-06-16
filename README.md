@@ -16,7 +16,7 @@ FluxCD automation repo for my k3s Cluster
 - [X] [PrivateBin](https://github.com/PrivateBin/PrivateBin)
 - [x] [kube-prometheus-stack](https://artifacthub.io/packages/helm/prometheus-community/kube-prometheus-stack)?
 - [x] [nginx-downlaod](https://github.com/BachErik/FileDownload)
-- [ ] [redirects](https://github.com/BachErik/k8s-redirects)
+- [X] redirects
 - [ ] [Reposilite](https://reposilite.com/)
 - [ ] [wakapi](https://github.com/muety/wakapi)
 
