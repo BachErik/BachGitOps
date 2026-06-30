@@ -15,6 +15,7 @@ spec:
               image: renovate/renovate:43.246.0
               args:
                 - BachErik/BachGitOps
+                - BachMark/BachMark
               env:
                 - name: RENOVATE_CONFIG_FILE
                   value: /config/config.js
