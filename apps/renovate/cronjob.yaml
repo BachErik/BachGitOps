@@ -16,6 +16,7 @@ spec:
               args:
                 - BachErik/BachGitOps
                 - BachMark/BachMark
+                - eron/Your-bizarre-adventure
               env:
                 - name: RENOVATE_CONFIG_FILE
                   value: /config/config.js
