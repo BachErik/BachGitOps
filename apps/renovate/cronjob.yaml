@@ -12,7 +12,7 @@ spec:
         spec:
           containers:
             - name: renovate
-              image: renovate/renovate:43.263.6
+              image: renovate/renovate:43.269.2
               args:
                 - BachErik/BachGitOps
                 - BachMark/BachMark
