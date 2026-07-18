@@ -9,6 +9,7 @@ data:
       platform: 'forgejo',
       endpoint: 'https://codeberg.org/api/v1/',
       gitAuthor: 'BachRenovate <renovate@bacherik.de>',
+      assignees: ['BachErik'],
       autodiscover: true,
       repositories: ['BachErik/BachGitOps'],
       onboarding: true,
