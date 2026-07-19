@@ -5,10 +5,7 @@
     "default:pinDigestsDisabled",
     "docker:enableMajor"
   ],
-  "ignorePresets": [
-    "docker:pinDigests",
-    "helpers:pinGitHubActionDigests"
-  ],
+  "ignorePresets": ["docker:pinDigests", "helpers:pinGitHubActionDigests"],
   "timezone": "Europe/Berlin",
   "automerge": false,
   "platformAutomerge": false,
@@ -46,9 +43,7 @@
   "customManagers": [
     {
       "customType": "regex",
-      "managerFilePatterns": [
-        "/upgrades/.+\\.ya?ml$/"
-      ],
+      "managerFilePatterns": ["/upgrades/.+\\.ya?ml$/"],
       "matchStrings": [
         "version:\\s*(?<currentValue>v[\\d]+\\.[\\d]+\\.[\\d]+\\+k3s\\d+)"
       ],
@@ -60,9 +55,7 @@
       "managerFilePatterns": [
         "/controllers/system-upgrade-controller/.+\\.ya?ml$/"
       ],
-      "matchStrings": [
-        "tag:\\s*(?<currentValue>v[\\d]+\\.[\\d]+\\.[\\d]+)"
-      ],
+      "matchStrings": ["tag:\\s*(?<currentValue>v[\\d]+\\.[\\d]+\\.[\\d]+)"],
       "depNameTemplate": "rancher/system-upgrade-controller",
       "datasourceTemplate": "github-releases"
     }
@@ -70,82 +63,50 @@
   "packageRules": [
     {
       "description": "Major updates require explicit dashboard approval",
-      "matchUpdateTypes": [
-        "major"
-      ],
+      "matchUpdateTypes": ["major"],
       "dependencyDashboardApproval": true,
-      "addLabels": [
-        "major"
-      ]
+      "addLabels": ["major"]
     },
     {
       "description": "Wait 3 days before opening PRs for brand-new releases",
-      "matchManagers": [
-        "flux"
-      ],
-      "matchDatasources": [
-        "helm",
-        "docker"
-      ],
+      "matchManagers": ["flux"],
+      "matchDatasources": ["helm", "docker"],
       "minimumReleaseAge": "3 days"
     },
     {
       "description": "Group non-major controller Helm chart updates",
-      "matchFileNames": [
-        "controllers/**"
-      ],
-      "matchDatasources": [
-        "helm"
-      ],
-      "matchUpdateTypes": [
-        "minor",
-        "patch"
-      ],
+      "matchFileNames": ["controllers/**"],
+      "matchDatasources": ["helm"],
+      "matchUpdateTypes": ["minor", "patch"],
       "groupName": "controllers (helm)",
       "groupSlug": "controllers-helm"
     },
     {
       "description": "Group non-major controller container image updates",
-      "matchFileNames": [
-        "controllers/**"
-      ],
-      "matchDatasources": [
-        "docker"
-      ],
-      "matchUpdateTypes": [
-        "minor",
-        "patch",
-        "digest"
-      ],
+      "matchFileNames": ["controllers/**"],
+      "matchDatasources": ["docker"],
+      "matchUpdateTypes": ["minor", "patch", "digest"],
       "groupName": "controllers (images)",
       "groupSlug": "controllers-images"
     },
     {
       "description": "Group updates per app automatically",
-      "matchFileNames": [
-        "apps/**"
-      ],
+      "matchFileNames": ["apps/**"],
       "additionalBranchPrefix": "{{parentDir}}-",
       "groupName": "{{parentDir}}",
       "groupSlug": "app-{{parentDir}}"
     },
     {
       "description": "k3s version bumps — own PR, wait 7 days for stability",
-      "matchDepNames": [
-        "k3s-io/k3s"
-      ],
+      "matchDepNames": ["k3s-io/k3s"],
       "groupName": "k3s upgrade",
       "groupSlug": "k3s-upgrade",
-      "addLabels": [
-        "k3s"
-      ],
+      "addLabels": ["k3s"],
       "minimumReleaseAge": "7 days"
     },
     {
       "description": "FluxCD self-updates in own PR",
-      "matchFileNames": [
-        "clusters/prod/flux-system/**"
-      ],
+      "matchFileNames": ["clusters/prod/flux-system/**"],
       "groupName": "flux-system",
       "groupSlug": "flux-system"
     },
@@ -161,9 +122,7 @@
     }
   ],
   "vulnerabilityAlerts": {
-    "labels": [
-      "security"
-    ],
+    "labels": ["security"],
     "prCreation": "immediate",
     "vulnerabilityFixStrategy": "lowest"
   }

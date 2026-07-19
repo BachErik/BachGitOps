@@ -6,8 +6,9 @@ metadata:
   labels:
     app: minecraft
 spec:
-  type: LoadBalancer          # k3s klipper/servicelb handles this out of the box.
-                              # Use NodePort, or a Traefik IngressRouteTCP, if you prefer.
+  type:
+    LoadBalancer # k3s klipper/servicelb handles this out of the box.
+    # Use NodePort, or a Traefik IngressRouteTCP, if you prefer.
   selector:
     app: minecraft
   ports:

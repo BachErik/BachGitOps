@@ -7,15 +7,15 @@ metadata:
     app: minecraft
 data:
   # --- required ---
-  EULA: "TRUE"                 # https://aka.ms/MinecraftEULA
+  EULA: "TRUE" # https://aka.ms/MinecraftEULA
 
   # --- server flavour ---
-  TYPE: "PAPER"                # VANILLA | PAPER | FABRIC | FORGE | PURPUR | ...
-  VERSION: "1.21.8"            # pin e.g. "1.21.4" for reproducible GitOps deploys
+  TYPE: "PAPER" # VANILLA | PAPER | FABRIC | FORGE | PURPUR | ...
+  VERSION: "1.21.8" # pin e.g. "1.21.4" for reproducible GitOps deploys
 
   # --- jvm / performance ---
-  MEMORY: "10G"                 # JVM heap. Keep BELOW the container memory limit.
-  USE_AIKAR_FLAGS: "true"      # sensible G1GC flags, recommended for Paper/Purpur
+  MEMORY: "10G" # JVM heap. Keep BELOW the container memory limit.
+  USE_AIKAR_FLAGS: "true" # sensible G1GC flags, recommended for Paper/Purpur
 
   # --- gameplay ---
   MOTD: "BachErik's Server"
@@ -28,7 +28,7 @@ data:
   # --- ops / misc ---
   MODRINTH_PROJECTS: "kTmEpjUi,5fu9B7as"
   TZ: "Europe/Berlin"
-  ENABLE_RCON: "true"          # required for graceful shutdown + the backup sidecar
-  OPS: "BachErik_"            # comma-separated player names
+  ENABLE_RCON: "true" # required for graceful shutdown + the backup sidecar
+  OPS: "BachErik_" # comma-separated player names
   WHITELIST: "BachErik_"
   ENFORCE_WHITELIST: "true"

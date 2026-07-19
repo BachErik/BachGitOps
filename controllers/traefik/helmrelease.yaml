@@ -41,8 +41,6 @@ spec:
         addEntryPointsLabels: true
         addServicesLabels: true
 
-
-
     # Allow Traefik to watch all namespaces
     providers:
       kubernetesIngress:
@@ -59,7 +57,7 @@ spec:
           service:
             namespace: traefik
             name: traefik
-            
+
     resources:
       requests:
         cpu: "100m"

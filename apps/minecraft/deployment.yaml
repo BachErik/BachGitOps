@@ -8,7 +8,7 @@ metadata:
 spec:
   replicas: 1
   strategy:
-    type: Recreate            # single RWO PVC -> never run two pods concurrently
+    type: Recreate # single RWO PVC -> never run two pods concurrently
   selector:
     matchLabels:
       app: minecraft
@@ -23,14 +23,14 @@ spec:
         runAsUser: 1000
         runAsGroup: 1000
         fsGroup: 1000
-      terminationGracePeriodSeconds: 60   # give the server time to save & stop cleanly
+      terminationGracePeriodSeconds: 60 # give the server time to save & stop cleanly
       containers:
         # ------------------------------------------------------------------
         # Minecraft server
         # ------------------------------------------------------------------
         - name: minecraft-server
-          image: itzg/minecraft-server:java21   # consider digest-pinning + Flux image automation
-          tty: true                # itzg recommends a TTY so the console attaches properly
+          image: itzg/minecraft-server:java21 # consider digest-pinning + Flux image automation
+          tty: true # itzg recommends a TTY so the console attaches properly
           stdin: true
           ports:
             - name: minecraft
@@ -51,7 +51,7 @@ spec:
           resources:
             requests:
               cpu: "1"
-              memory: 10Gi        # >= MEMORY (heap) + JVM/OS overhead
+              memory: 10Gi # >= MEMORY (heap) + JVM/OS overhead
             limits:
               cpu: "4"
               memory: 12Gi
@@ -61,16 +61,40 @@ spec:
           # mc-monitor ships inside the image and speaks the MC ping protocol.
           startupProbe:
             exec:
-              command: ["mc-monitor", "status", "--host", "127.0.0.1", "--port", "25565"]
-            failureThreshold: 30   # up to ~5 min for first start / world gen
+              command:
+                [
+                  "mc-monitor",
+                  "status",
+                  "--host",
+                  "127.0.0.1",
+                  "--port",
+                  "25565",
+                ]
+            failureThreshold: 30 # up to ~5 min for first start / world gen
             periodSeconds: 10
           readinessProbe:
             exec:
-              command: ["mc-monitor", "status", "--host", "127.0.0.1", "--port", "25565"]
+              command:
+                [
+                  "mc-monitor",
+                  "status",
+                  "--host",
+                  "127.0.0.1",
+                  "--port",
+                  "25565",
+                ]
             periodSeconds: 10
           livenessProbe:
             exec:
-              command: ["mc-monitor", "status", "--host", "127.0.0.1", "--port", "25565"]
+              command:
+                [
+                  "mc-monitor",
+                  "status",
+                  "--host",
+                  "127.0.0.1",
+                  "--port",
+                  "25565",
+                ]
             periodSeconds: 30
             failureThreshold: 5
 
@@ -107,7 +131,7 @@ spec:
           volumeMounts:
             - name: data
               mountPath: /data
-              readOnly: true       # backup only reads the world; flush is done via RCON
+              readOnly: true # backup only reads the world; flush is done via RCON
             - name: backups
               mountPath: /backups
       volumes:
