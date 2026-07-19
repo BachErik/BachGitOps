@@ -148,6 +148,16 @@
       ],
       "groupName": "flux-system",
       "groupSlug": "flux-system"
+    },
+    {
+      "description": "Renovate itself: non-major automerge, in the evening",
+      "matchFileNames": ["apps/renovate/**"],
+      "matchUpdateTypes": ["minor", "patch", "digest"],
+      "automerge": true,
+      "automergeType": "pr",
+      "minimumReleaseAge": "1 day",
+      "schedule": ["after 19:00 before 23:00"],
+      "addLabels": ["automerge"]
     }
   ],
   "vulnerabilityAlerts": {
