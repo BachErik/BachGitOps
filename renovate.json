@@ -109,19 +109,19 @@
       "matchFileNames": ["clusters/prod/flux-system/**"],
       "groupName": "flux-system",
       "groupSlug": "flux-system"
-    },{
+    },
+    {
   "description": "Renovate itself: non-major automerge, evening",
   "matchFileNames": ["apps/renovate/**"],
   "matchUpdateTypes": ["minor", "patch", "digest"],
   "automerge": true,
   "automergeType": "pr",
   "platformAutomerge": false,
-  "schedule": ["after 19:00 before 20:00"],
-  "automergeSchedule": ["after 20:00 before 23:00"],
+  "schedule": ["after 19:00 before 23:00"],
   "updateNotScheduled": false,
   "minimumReleaseAge": "1 day",
   "addLabels": ["automerge"]
-    },
+},
   ],
   "vulnerabilityAlerts": {
     "labels": ["security"],
