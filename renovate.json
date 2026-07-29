@@ -118,7 +118,7 @@
   "automergeType": "pr",
   "platformAutomerge": false,
   "ignoreTests": true,
-  "schedule": ["after 19:00 before 23:00"],
+  "schedule": ["after 19:00 before 20:00"],
   "updateNotScheduled": false,
   "minimumReleaseAge": "1 day",
   "addLabels": ["automerge"]
