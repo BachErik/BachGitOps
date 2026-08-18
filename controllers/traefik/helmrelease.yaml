@@ -14,10 +14,10 @@ spec:
         name: traefik
         namespace: flux-system
       interval: 12h
-    install:
-      crds: Create
-    upgrade:
-      crds: CreateReplace
+  install:
+    crds: Create
+  upgrade:
+    crds: CreateReplace
   values:
     #ports:
     #  minecraft:
