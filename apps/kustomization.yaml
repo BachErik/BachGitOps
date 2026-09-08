@@ -8,7 +8,7 @@ resources:
   - killedby/
   - privatebin/
   - oneuptime/
-  - rtmp/
+  - ovenmediaengine/
   - redirect/
   - renovate/
   #- minecraft/

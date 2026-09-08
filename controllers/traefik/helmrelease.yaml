@@ -79,5 +79,3 @@ spec:
             target:
               type: Utilization
               averageUtilization: 80
-    additionalArguments:
-      - "--entryPoints.rtmp.address=:1935/tcp"

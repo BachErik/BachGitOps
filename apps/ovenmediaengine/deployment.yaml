@@ -1,0 +1,82 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ovenmediaengine
+  namespace: ovenmediaengine
+  labels:
+    app: ovenmediaengine
+  annotations:
+    reloader.stakater.com/auto: "true"
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: ovenmediaengine
+  template:
+    metadata:
+      labels:
+        app: ovenmediaengine
+    spec:
+      hostNetwork: true
+      dnsPolicy: ClusterFirstWithHostNet
+      terminationGracePeriodSeconds: 30
+      containers:
+        - name: ovenmediaengine
+          image: ovenmedialabs/ovenmediaengine:0.21.0
+          imagePullPolicy: IfNotPresent
+          env:
+            - name: OME_HOST_IP
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.hostIP
+          ports:
+            - name: rtmp
+              containerPort: 1935
+              protocol: TCP
+            - name: srt-in
+              containerPort: 9999
+              protocol: UDP
+            - name: srt-out
+              containerPort: 9998
+              protocol: UDP
+            - name: signalling
+              containerPort: 3333
+              protocol: TCP
+            - name: ice-tcp
+              containerPort: 10000
+              protocol: TCP
+            - name: turn
+              containerPort: 3478
+              protocol: TCP
+          volumeMounts:
+            - name: config
+              mountPath: /opt/ovenmediaengine/bin/origin_conf
+              readOnly: true
+          resources:
+            requests:
+              cpu: "250m"
+              memory: "256Mi"
+            limits:
+              cpu: "2"
+              memory: "1Gi"
+          startupProbe:
+            tcpSocket:
+              port: 1935
+            initialDelaySeconds: 5
+            periodSeconds: 5
+            failureThreshold: 12
+          readinessProbe:
+            tcpSocket:
+              port: 3333
+            periodSeconds: 10
+          livenessProbe:
+            tcpSocket:
+              port: 1935
+            periodSeconds: 30
+            failureThreshold: 5
+      volumes:
+        - name: config
+          configMap:
+            name: ovenmediaengine-config

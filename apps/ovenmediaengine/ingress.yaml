@@ -1,0 +1,24 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: ovenmediaengine
+  namespace: ovenmediaengine
+  annotations:
+    cert-manager.io/cluster-issuer: "letsencrypt-prod"
+spec:
+  ingressClassName: traefik
+  tls:
+    - hosts:
+        - stream.bacherik.de
+      secretName: stream-tls
+  rules:
+    - host: "stream.bacherik.de"
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: ovenmediaengine
+                port:
+                  number: 3333

@@ -1,0 +1,276 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: ovenmediaengine-config
+  namespace: ovenmediaengine
+  labels:
+    app: ovenmediaengine
+data:
+  Server.id: "0913d0dc-74e1-467f-adfc-747a23cf9bf6"
+
+  Logger.xml: |-
+    <?xml version="1.0" encoding="UTF-8"?>
+
+    <Logger version="2">
+    	<Path>/var/log/ovenmediaengine</Path>
+
+    	<!-- No log PVC in the cluster: the on-disk sink is off and everything
+    	     goes to stdout, where the container runtime picks it up
+    	     (kubectl logs / Loki / whatever). -->
+    	<File enabled="false"/>
+
+    	<Tag name="SRT" level="critical" />
+    	<Tag name="HTTP.Server" level="warn" />
+    	<Tag name=".*\.Stat" level="warn" />
+
+    	<Tag name=".*" level="info" />
+    </Logger>
+
+  Server.xml: |-
+    <?xml version="1.0" encoding="UTF-8" ?>
+
+    <!--
+    	OvenMediaEngine — ported from the local compose setup (2026-08-27) to k3s.
+
+    	Purpose: single-origin, low-latency setup.
+    	  ingest   RTMP 1935 (OBS)  +  SRT 9999 (GStreamer)
+    	  playback WebRTC 3333 (browser)  +  SRT 9998 (VLC / ffplay)
+
+    	Deliberately removed vs. the stock config, to cut moving parts:
+    	  - WebRTC Provider   (WHIP ingest — unused, binds a SECOND ICE port set)
+    	  - OVT publisher     (origin-edge clustering — unused)
+    	  - LLHLS publisher   (packages segments every 6s even with no viewer)
+    	  - HLS v3 publisher  (legacy)
+    	  - <TLS> block       (TLS is terminated by Traefik, see ingress.yaml)
+    	Commented-out blocks let you put any of these back.
+
+    	k3s-specific: the pod runs with hostNetwork, so OME sees the node's real
+    	interfaces and ${env:OME_HOST_IP} is injected from status.hostIP.
+    -->
+
+    <Server version="8">
+    	<Name>OvenMediaEngine</Name>
+    	<Type>origin</Type>
+    	<IP>*</IP>
+    	<PrivacyProtection>false</PrivacyProtection>
+
+    	<StunServer>stun.ovenmediaengine.com:13478</StunServer>
+
+    	<Modules>
+    		<HTTP2>
+    			<Enable>true</Enable>
+    		</HTTP2>
+
+    		<LLHLS>
+    			<Enable>true</Enable>
+    		</LLHLS>
+
+    		<P2P>
+    			<Enable>false</Enable>
+    		</P2P>
+
+    		<Jemalloc>
+    			<BackgroundPurge>true</BackgroundPurge>
+    		</Jemalloc>
+
+    		<TaskPool>
+    			<ThreadCount>4</ThreadCount>
+    			<MaxTasks>128</MaxTasks>
+    		</TaskPool>
+    	</Modules>
+
+    	<Bind>
+    		<!-- REST API for live stats. With hostNetwork this would be open on
+    		     the node's public IP, so keep it off unless you add auth.
+    		<Managers>
+    			<API>
+    				<Port>${env:OME_API_PORT:8081}</Port>
+    				<WorkerCount>1</WorkerCount>
+    			</API>
+    		</Managers>
+    		-->
+
+    		<Providers>
+    			<RTMP>
+    				<Port>${env:OME_RTMP_PROV_PORT:1935}</Port>
+    				<WorkerCount>1</WorkerCount>
+    			</RTMP>
+    			<SRT>
+    				<Port>${env:OME_SRT_PROV_PORT:9999}</Port>
+    				<WorkerCount>1</WorkerCount>
+    			</SRT>
+    		</Providers>
+
+    		<Publishers>
+    			<!-- SRT playback. MUST differ from the SRT Provider port above. -->
+    			<SRT>
+    				<Port>${env:OME_SRT_PUB_PORT:9998}</Port>
+    				<WorkerCount>1</WorkerCount>
+    			</SRT>
+
+    			<WebRTC>
+    				<Signalling>
+    					<Port>${env:OME_WEBRTC_SIGNALLING_PORT:3333}</Port>
+    					<TLSPort>${env:OME_WEBRTC_SIGNALLING_TLS_PORT:3334}</TLSPort>
+    					<WorkerCount>1</WorkerCount>
+    				</Signalling>
+    				<IceCandidates>
+    					<!--
+    						Do NOT set this to *.
+
+    						With * OME advertises every local interface, including
+    						the flannel/cni bridges (10.42.x.x), which no client
+    						can reach. The browser then runs connectivity checks
+    						against all of them and keeps re-nominating candidates
+    						while the stream already plays.
+
+    						OME_HOST_IP comes from status.hostIP (see deployment).
+    						If your nodes register with a private/WireGuard address
+    						instead of the public one, replace the fieldRef with a
+    						literal public IP there.
+    					-->
+    					<IceCandidate>${env:OME_HOST_IP:127.0.0.1}:${env:OME_WEBRTC_CANDIDATE_PORT:10000-10003/udp}</IceCandidate>
+    					<!-- Direct TCP ICE (RFC 6544) — fallback when UDP is blocked -->
+    					<IceCandidate>${env:OME_HOST_IP:127.0.0.1}:${env:OME_WEBRTC_TCP_ICE_PORT:10000/tcp}</IceCandidate>
+    					<!-- Embedded TURN relay, only offered on ?transport=relay|all -->
+    					<TcpRelay>${env:OME_HOST_IP:127.0.0.1}:${env:OME_WEBRTC_TCP_RELAY_PORT:3478}</TcpRelay>
+    					<TcpRelayForce>false</TcpRelayForce>
+    					<TcpIceWorkerCount>1</TcpIceWorkerCount>
+    					<TcpRelayWorkerCount>1</TcpRelayWorkerCount>
+    					<DefaultTransport>udptcp</DefaultTransport>
+    				</IceCandidates>
+    			</WebRTC>
+
+    			<!-- Put LLHLS back by uncommenting this AND the app publisher below.
+    			<LLHLS>
+    				<Port>${env:OME_LLHLS_STREAM_PORT:3333}</Port>
+    				<TLSPort>${env:OME_LLHLS_STREAM_TLS_PORT:3334}</TLSPort>
+    				<WorkerCount>1</WorkerCount>
+    			</LLHLS>
+    			-->
+    		</Publishers>
+    	</Bind>
+
+    	<Defaults>
+    		<CrossDomains>
+    			<Url>*</Url>
+    		</CrossDomains>
+    	</Defaults>
+
+    	<VirtualHosts>
+    		<VirtualHost include="VHost*.xml" />
+    		<VirtualHost>
+    			<Name>default</Name>
+    			<Distribution>ovenmediaengine.com</Distribution>
+
+    			<Host>
+    				<Names>
+    					<Name>*</Name>
+    				</Names>
+    				<!-- TLS is terminated by Traefik (cert-manager cert), so OME
+    				     itself stays plain HTTP/WS on 3333.
+    				<TLS>
+    					<CertPath>./cert.crt</CertPath>
+    					<KeyPath>./cert.key</KeyPath>
+    					<ChainCertPath>./cert.ca-bundle</ChainCertPath>
+    				</TLS>
+    				-->
+    			</Host>
+
+    			<Applications>
+    				<Application>
+    					<Name>app</Name>
+    					<Type>live</Type>
+
+    					<OutputProfiles>
+    						<OutputProfile>
+    							<Name>bypass</Name>
+    							<OutputStreamName>${OriginStreamName}</OutputStreamName>
+    							<Encodes>
+    								<!-- Video passthrough: no re-encode, no quality
+    								     loss, no CPU. Encoder must send H.264
+    								     Main/Baseline with B-frames off. -->
+    								<Video>
+    									<Name>video_pt</Name>
+    									<Bypass>true</Bypass>
+    								</Video>
+    								<!-- AAC passthrough — the track SRT uses.
+    								     WebRTC cannot carry AAC and ignores it. -->
+    								<Audio>
+    									<Name>audio_pt</Name>
+    									<Bypass>true</Bypass>
+    								</Audio>
+    								<!-- Opus — required for WebRTC. Only transcode
+    								     in the whole pipeline. -->
+    								<Audio>
+    									<Name>audio_opus</Name>
+    									<Codec>opus</Codec>
+    									<Bitrate>128000</Bitrate>
+    									<Samplerate>48000</Samplerate>
+    									<Channel>2</Channel>
+    								</Audio>
+    							</Encodes>
+    							<Playlist>
+    								<Name>master</Name>
+    								<FileName>master</FileName>
+    								<Options>
+    									<EnableTsPackaging>true</EnableTsPackaging>
+    								</Options>
+    								<Rendition>
+    									<Name>passthrough</Name>
+    									<Video>video_pt</Video>
+    									<Audio>audio_pt</Audio>
+    								</Rendition>
+    							</Playlist>
+    						</OutputProfile>
+    					</OutputProfiles>
+
+    					<Providers>
+    						<RTMP />
+    						<SRT />
+    						<!-- <WebRTC /> WHIP ingest — binds its own ICE ports -->
+    						<!-- <RTSPPull /> -->
+    						<!-- <OVT /> -->
+    					</Providers>
+
+    					<Publishers>
+    						<AppWorkerCount>1</AppWorkerCount>
+    						<StreamWorkerCount>8</StreamWorkerCount>
+
+    						<SRT />
+
+    						<WebRTC>
+    							<Timeout>30000</Timeout>
+    							<BandwidthEstimation>TransportCC</BandwidthEstimation>
+    							<Rtx>true</Rtx>
+    							<Ulpfec>false</Ulpfec>
+    							<!-- Re-spaces frames by PTS before sending, so bursty
+    							     ingest pacing is not passed to the player. -->
+    							<JitterBuffer>true</JitterBuffer>
+    							<!-- Browser holds video 100-300ms before rendering.
+    							     Raise Min if stutter persists, lower to claw
+    							     back latency. Range 0-40950. -->
+    							<PlayoutDelay>
+    								<Min>100</Min>
+    								<Max>300</Max>
+    							</PlayoutDelay>
+    							<CreateDefaultPlaylist>true</CreateDefaultPlaylist>
+    						</WebRTC>
+
+    						<!-- LLHLS: packages a segment every 6s whether or not
+    						     anyone is watching. Off.
+    						<LLHLS>
+    							<OriginMode>true</OriginMode>
+    							<ChunkDuration>0.5</ChunkDuration>
+    							<PartHoldBack>1.5</PartHoldBack>
+    							<SegmentDuration>6</SegmentDuration>
+    							<SegmentCount>10</SegmentCount>
+    							<CreateDefaultPlaylist>true</CreateDefaultPlaylist>
+    						</LLHLS>
+    						-->
+    					</Publishers>
+    				</Application>
+    			</Applications>
+    		</VirtualHost>
+    	</VirtualHosts>
+    </Server>

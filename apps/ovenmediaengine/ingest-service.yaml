@@ -1,0 +1,24 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: ovenmediaengine-ingest
+  namespace: ovenmediaengine
+  labels:
+    app: ovenmediaengine
+  annotations:
+    external-dns.alpha.kubernetes.io/hostname: ingest.bacherik.de
+    external-dns.alpha.kubernetes.io/ttl: "60"
+spec:
+  clusterIP: None
+  selector:
+    app: ovenmediaengine
+  ports:
+    - name: rtmp
+      port: 1935
+      protocol: TCP
+    - name: srt-in
+      port: 9999
+      protocol: UDP
+    - name: srt-out
+      port: 9998
+      protocol: UDP
