@@ -5,9 +5,6 @@ metadata:
   namespace: ovenmediaengine
   labels:
     app: ovenmediaengine
-  annotations:
-    external-dns.alpha.kubernetes.io/hostname: ingest.bacherik.de
-    external-dns.alpha.kubernetes.io/ttl: "60"
 spec:
   clusterIP: None
   selector:
