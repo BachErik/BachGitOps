@@ -89,3 +89,5 @@ spec:
           secretKeyRef:
             name: cloudflare-api-key
             key: apiKey
+    extraArgs:
+      - --publish-internal-services
