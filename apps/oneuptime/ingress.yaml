@@ -5,7 +5,7 @@ metadata:
   namespace: oneuptime
   annotations:
     cert-manager.io/cluster-issuer: letsencrypt-prod
-    external-dns.alpha.kubernetes.io/hostname: oneuptime.bacherik.de,status.bacherik.de
+    external-dns.kubernetes.io/hostname: oneuptime.bacherik.de,status.bacherik.de
     traefik.ingress.kubernetes.io/router.middlewares: traefik-default-headers@kubernetescrd
 spec:
   ingressClassName: traefik
