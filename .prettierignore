@@ -1,0 +1,11 @@
+**/*.sops.yaml
+
+apps/killedby/killedby-token.yaml
+apps/minecraft/secret.yaml
+apps/oneuptime/db-secret.yaml
+apps/renovate/secret.yaml
+configs/cert-manager/clusterissuer.yaml
+configs/longhorn/backup-target.yaml
+controllers/external-dns/helmrelease.yaml
+controllers/kube-prometheus-stack/secret.yaml
+notifications/discord-provider.yaml
