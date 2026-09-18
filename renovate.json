@@ -18,6 +18,7 @@
   "flux": {
     "managerFilePatterns": [
       "/(^|/)clusters/.+\\.ya?ml$/",
+      "/(^|/)flux/.+\\.ya?ml$/",
       "/(^|/)controllers/.+\\.ya?ml$/",
       "/(^|/)configs/.+\\.ya?ml$/",
       "/(^|/)apps/.+\\.ya?ml$/",
@@ -49,6 +50,14 @@
       ],
       "depNameTemplate": "k3s-io/k3s",
       "datasourceTemplate": "github-releases"
+    },
+    {
+      "customType": "regex",
+      "managerFilePatterns": ["/flux/flux-instance\\.yaml$/"],
+      "matchStrings": ["version: \"(?<currentValue>\\d+\\.\\d+\\.\\d+)\""],
+      "datasourceTemplate": "github-releases",
+      "depNameTemplate": "fluxcd/flux2",
+      "extractVersionTemplate": "^v(?<version>.*)$"
     },
     {
       "customType": "regex",
@@ -103,12 +112,6 @@
       "groupSlug": "k3s-upgrade",
       "addLabels": ["k3s"],
       "minimumReleaseAge": "7 days"
-    },
-    {
-      "description": "FluxCD self-updates in own PR",
-      "matchFileNames": ["clusters/prod/flux-system/**"],
-      "groupName": "flux-system",
-      "groupSlug": "flux-system"
     },
     {
       "description": "Renovate itself: non-major automerge, evening",
